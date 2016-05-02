@@ -123,6 +123,33 @@ test/fast:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
 .PHONY : test/fast
 
+jsoncpp.o: jsoncpp.cpp.o
+
+.PHONY : jsoncpp.o
+
+# target to build an object file
+jsoncpp.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/jsoncpp.cpp.o
+.PHONY : jsoncpp.cpp.o
+
+jsoncpp.i: jsoncpp.cpp.i
+
+.PHONY : jsoncpp.i
+
+# target to preprocess a source file
+jsoncpp.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/jsoncpp.cpp.i
+.PHONY : jsoncpp.cpp.i
+
+jsoncpp.s: jsoncpp.cpp.s
+
+.PHONY : jsoncpp.s
+
+# target to generate assembly for a file
+jsoncpp.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/jsoncpp.cpp.s
+.PHONY : jsoncpp.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... jsoncpp.o"
+	@echo "... jsoncpp.i"
+	@echo "... jsoncpp.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

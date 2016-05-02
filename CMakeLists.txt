@@ -7,7 +7,8 @@ add_definitions(-std=c++0x)
 set(CMAKE_CXX_FLAGS "${CMAXE_CXX_FLAGS} -Wall")
 
 set(sources 
-   main.cpp)
+   main.cpp
+   jsoncpp.cpp)
 add_executable(test ${sources})
 target_link_libraries(test pthread)
 target_link_libraries(test gmock)

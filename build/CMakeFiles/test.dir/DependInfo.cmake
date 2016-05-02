@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/Users/angus/CPP_testing/firstCode/jsoncpp.cpp" "/Users/angus/CPP_testing/firstCode/build/CMakeFiles/test.dir/jsoncpp.cpp.o"
   "/Users/angus/CPP_testing/firstCode/main.cpp" "/Users/angus/CPP_testing/firstCode/build/CMakeFiles/test.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
@@ -12,6 +13,8 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/Users/angus/googletest-master/googlemock/include"
   "/Users/angus/googletest-master/googletest/include"
+  "/Users/angus/jsoncpp-master/include"
+  "/Users/angus/curl-7.48.0/include"
   )
 
 # Targets to which this target links.
