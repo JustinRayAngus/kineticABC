@@ -1,0 +1,14 @@
+export GMOCK_HOME=/Users/angus/googletest-master/googlemock/
+export GTEST_HOME=/Users/angus/googletest-master/googletest/
+
+export CURL_HOME=/Users/angus/curl-7.48.0/
+export JSONCPP_HOME=/Users/angus/jsoncpp-master/
+export RLOG_HOME=/Users/angus/rlog-1.4/
+
+export BOOST_ROOT=/Users/angus/boost_1_60_0/
+export BOOST_VERSION=1.60.0
+
+export CC=/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3
+export CXX=/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9
+
+

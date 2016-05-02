@@ -1,0 +1,8 @@
+1) Linking JSONCPP library
+
+I had issues with getting the appropriate library link for json when 
+installing with scons. I found how to install with Cmake and that worked better.
+
+Note that link should be location where libjsoncpp.a is located when using Cmake
+installed version and should be where json_linu-gcc-4.7.4 is located when using 
+scons installed version
