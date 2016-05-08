@@ -6,6 +6,18 @@
 
 #IncludeRegexTransform: 
 
+/Users/angus/CPP_testing/firstCode/energyGrid.h
+iostream
+-
+vector
+-
+string
+-
+fstream
+-
+json/json.h
+/Users/angus/CPP_testing/firstCode/json/json.h
+
 /Users/angus/CPP_testing/firstCode/json/json.h
 stddef.h
 -
@@ -161,6 +173,8 @@ fstream
 -
 json/json.h
 /Users/angus/CPP_testing/firstCode/json/json.h
+energyGrid.h
+/Users/angus/CPP_testing/firstCode/energyGrid.h
 
 /Users/angus/googletest-master/googlemock/include/gmock/gmock-actions.h
 errno.h
