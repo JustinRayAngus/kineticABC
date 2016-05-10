@@ -15,6 +15,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/Users/angus/googletest-master/googletest/include"
   "/Users/angus/jsoncpp-master/include"
   "/Users/angus/curl-7.48.0/include"
+  "/Users/angus/myHDF5stuff/hdf5-1.8.16/hdf5/include"
   )
 
 # Targets to which this target links.

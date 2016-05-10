@@ -1,0 +1,75 @@
+#include "gmock/gmock.h"
+#include <iostream>
+#include <string>
+#include <fstream>
+#include "json/json.h"
+#include "energyGrid.h"
+#include "HDF5FileTools.h"
+#include "H5Cpp.h"
+
+using namespace std;
+
+#ifndef H5_NO_NAMESPACE
+   using namespace H5;
+#endif
+
+const int NX = 5;
+const int NY = 6;
+const int RANK = 2;
+
+int main(int argc, char** argv) {
+
+   // Read energy grid from specified input file
+   //
+   string inputFile = "input_file.json";
+   energyGrid Egrid;
+   Egrid.setEnergyGrid(inputFile);
+   cout << "nE = " << Egrid.nE << endl;
+   cout << "Emax = " << Egrid.Emax << endl;
+   cout << "dE = " << Egrid.dE << endl; 
+   //for (auto n = 0; n < Egrid.nE; n++) {
+   //   cout << "Ecc[" << n << "] = " << Egrid.Ecc[n] << endl; 
+   //   cout << "Ece[" << n << "] = " << Egrid.Ece[n] << endl; 
+   //}
+   
+   // now load other information and manipulate f0 in time
+   //
+
+   // now write stuff to hdf5 files
+   //
+   
+   //int i, j;
+   //int data[NX][NY];
+   //for (j=0; j<NX; j++)
+   //{
+   //   for (i=0; i<NY; i++)
+   //   {
+   //      data[j][i] = i + j;
+   //   }
+   //} 
+   //// cout << data[2][3] << endl;
+    
+   // write stuff to HDF5 output file
+   //
+   const string outputFile = "output.h5";
+   const string varName = "IntArray";
+   HDF5FileTools hdf5FileTools;
+   hdf5FileTools.writeOutput(outputFile, varName);
+
+   //hsize_t dimsf[2];
+   //dimsf[0] = NX;
+   //dimsf[1] = NY;
+   //DataSpace dataspace( RANK, dimsf);
+   //IntType datatype (PredType::NATIVE_INT);
+   //datatype.setOrder(H5T_ORDER_LE);
+   //DataSet dataset = file.createDataSet( varName.c_str(), datatype, dataspace);
+   //dataset.write( data, PredType::NATIVE_INT); 
+
+
+   return 1;
+
+   //testing::InitGoogleMock(&argc, argv);
+   //return RUN_ALL_TESTS();
+}
+
+

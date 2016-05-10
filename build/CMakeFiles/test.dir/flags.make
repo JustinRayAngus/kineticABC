@@ -6,5 +6,5 @@ CXX_FLAGS =  -Wall   -std=c++0x
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/angus/googletest-master/googlemock/include -I/Users/angus/googletest-master/googletest/include -I/Users/angus/jsoncpp-master/include -I/Users/angus/curl-7.48.0/include 
+CXX_INCLUDES = -I/Users/angus/googletest-master/googlemock/include -I/Users/angus/googletest-master/googletest/include -I/Users/angus/jsoncpp-master/include -I/Users/angus/curl-7.48.0/include -I/Users/angus/myHDF5stuff/hdf5-1.8.16/hdf5/include 
 

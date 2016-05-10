@@ -11,4 +11,4 @@ export BOOST_VERSION=1.60.0
 export CC=/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3
 export CXX=/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9
 
-
+export HDF5_HOME=/Users/angus/myHDF5stuff/hdf5-1.8.16/hdf5

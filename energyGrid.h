@@ -56,17 +56,20 @@ void energyGrid::setEnergyGrid(const string& inputFile)
       }
    }
    else {
-      cout << "json is not OK !!" << endl;
+      printf("ERROR: json is not OK ?? ... input file not found? \n");
+      exit (EXIT_FAILURE);
    }
   
-   Ecc.reserve(nE);
-   Ece.reserve(nE+1);
+   //Ecc.reserve(nE);
+   //Ece.reserve(nE+1);
+   Ecc.assign (nE,0.0);
+   Ece.assign (nE+1,0.0);
    for (int n=0; n<nE; n++) {
       Ecc[n] = 0.5*dE+n*dE;
       Ece[n] = n*dE;
    }
    Ece[nE] = Emax;
-
+   // cout << Ecc.size() << endl; // always gives 0????
 }
 
 
