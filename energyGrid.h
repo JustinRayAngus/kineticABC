@@ -35,7 +35,7 @@ void energyGrid::setEnergyGrid(const string& inputFile)
    if(isJsonOK) {
       const Json::Value Egrid = root.get("Egrid",defValue);
       if(Egrid.isObject()) {
-         printf("\nReading energy grid information from file: %s %s",
+         printf("\nReading energy grid from file: %s %s",
                 inputFile.c_str(), "\n");
          Json::Value EmaxVal = Egrid.get("Emax",defValue);
          Json::Value nEVal = Egrid.get("nE",defValue);
@@ -56,15 +56,15 @@ void energyGrid::setEnergyGrid(const string& inputFile)
       }
    }
    else {
-      printf("ERROR: json is not OK ?? ... input file not found? \n");
+      printf("ERROR: json is not OK ... input file not found? \n");
       exit (EXIT_FAILURE);
    }
   
    //Ecc.reserve(nE);
    //Ece.reserve(nE+1);
-   Ecc.assign (nE,0.0);
-   Ece.assign (nE+1,0.0);
-   for (int n=0; n<nE; n++) {
+   Ecc.assign(nE,0.0);
+   Ece.assign(nE+1,0.0);
+   for (auto n=0; n<nE; n++) {
       Ecc[n] = 0.5*dE+n*dE;
       Ece[n] = n*dE;
    }

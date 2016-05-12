@@ -5,9 +5,11 @@
 #include <vector>
 #include <typeinfo>
 #include "json/json.h"
-#include "energyGrid.h"
-#include "HDF5FileTools.h"
 #include "H5Cpp.h"
+
+#include "energyGrid.h"
+#include "HDF5dataFile.h"
+#include "EEDF.h"
 
 using namespace std;
 
@@ -19,11 +21,11 @@ const int NX = 5;
 const int NY = 6;
 const int RANK = 2;
 
-int main(int argc, char** argv) {
-   
+int main(int argc, char** argv) {   
    cout << "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" << endl;
    cout << "" << endl;
    cout << "Initiating simulation" << endl;
+
    
    // Create energy grid from a specified json input file
    //
@@ -38,6 +40,12 @@ int main(int argc, char** argv) {
    //   cout << "Ece[" << n << "] = " << Egrid.Ece[n] << endl; 
    //}
 
+
+   // Initialize the electron-energy-distribution function
+   //
+   EEDF eedf;
+   eedf.initialize(Egrid, inputFile);   
+
    
    // load more information and manipulate f0 in time
    //
@@ -49,26 +57,24 @@ int main(int argc, char** argv) {
    //cout << vec2d[0].size() << endl;
 
 
-   // write energy grid to a specifid h5 output file
+   // write energy grid to a specified h5 output file
    // 
-   HDF5FileTools hdf5FileTools;
+   HDF5dataFile dataFile;
    const string outputFile = "output.h5";
    H5File file( outputFile.c_str(), H5F_ACC_TRUNC ); // overwrites old
    //
-   const string varNameEcc = "Ecc";
-   hdf5FileTools.writeOutput(outputFile, varNameEcc, Egrid.Ecc);
-   //
-   const string varNameEce = "Ece";
-   hdf5FileTools.writeOutput(outputFile, varNameEce, Egrid.Ece);
-   //
-   //const string varNamevec2d = "vec2d";
-   //hdf5FileTools.writeOutput(outputFile, varNamevec2d, vec2d);
+   dataFile.writeOutput(outputFile, "Ecc", Egrid.Ecc);
+   dataFile.writeOutput(outputFile, "Ece", Egrid.Ece);
+   dataFile.writeOutput(outputFile, "f0", eedf.f0);
+   //dataFile.writeOutput(outputFile, "Ecc", Egrid.Ecc);
+   //dataFile.writeOutput(outputFile, "vec2d", vec2d);
    
 
    cout << "\nEnding simulation" << endl;
    cout << "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" << endl;
    cout << "" << endl;
    return 1;
+
 
    //testing::InitGoogleMock(&argc, argv);
    //return RUN_ALL_TESTS();

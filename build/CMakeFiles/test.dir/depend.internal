@@ -9,7 +9,8 @@ CMakeFiles/test.dir/jsoncpp.cpp.o
  /Users/angus/jsoncpp-master/include/json/value.h
  /Users/angus/jsoncpp-master/include/json/writer.h
 CMakeFiles/test.dir/main.cpp.o
- /Users/angus/CPP_testing/firstCode/HDF5FileTools.h
+ /Users/angus/CPP_testing/firstCode/EEDF.h
+ /Users/angus/CPP_testing/firstCode/HDF5dataFile.h
  /Users/angus/CPP_testing/firstCode/energyGrid.h
  /Users/angus/CPP_testing/firstCode/json/json.h
  /Users/angus/CPP_testing/firstCode/main.cpp
