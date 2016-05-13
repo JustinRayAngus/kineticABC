@@ -1,11 +1,11 @@
 {
 "Egrid":{
-         "Emax":10, // [eV]
-         "nE":1e3
+         "Emax":100, // [eV]
+         "nE":1e4
         },
 "EEDF" :{
-         "Te":1,    // [eV]
-         "type":"gaussian"
+         "Te":10,    // [eV]
+         "type":"Gaussian"
        }
 }
 

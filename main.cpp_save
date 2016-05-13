@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
    
    // Parse the specified json input file
    //
-   const string inputFile = "../input_file.json";
+   const string inputFile = "input_file.json";
    Json::Value inputRoot; // will contain root value after parsing
    Json::Reader reader; 
    ifstream ifile(inputFile);
@@ -61,19 +61,18 @@ int main(int argc, char** argv) {
 
    // write energy grid to a specified h5 output file
    // 
-   const string outputFile = "output.h5";
-   H5File file(outputFile.c_str(), H5F_ACC_TRUNC); // overwrites old
-   //
    HDF5dataFile dataFile;
-   dataFile.writeOutput(outputFile, "Ecc", Egrid.Ecc, 0);
-   dataFile.writeOutput(outputFile, "Ece", Egrid.Ece, 0);
-   dataFile.writeOutput(outputFile, "f0", eedf.f0, 1);
-   dataFile.writeOutput(outputFile, "Te0", eedf.Te0, 1);
-   dataFile.writeOutput(outputFile, "f0", eedf.f0, 1);
-   //dataFile.writeOutput(outputFile, "Ecc", Egrid.Ecc, 0); // returns error
-   //dataFile.writeOutput(outputFile, "Ecc", Egrid.Ecc, 1); // returns error
+   const string outputFile = "output.h5";
+   H5File file( outputFile.c_str(), H5F_ACC_TRUNC ); // overwrites old
+   //
+   dataFile.writeOutput(outputFile, "Ecc", Egrid.Ecc);
+   dataFile.writeOutput(outputFile, "Ece", Egrid.Ece);
+   dataFile.writeOutput(outputFile, "f0", eedf.f0);
+   dataFile.writeOutput(outputFile, "Te0", eedf.Te0);
+   //dataFile.writeOutput(outputFile, "Ecc", Egrid.Ecc);
    //dataFile.writeOutput(outputFile, "vec2d", vec2d);
    
+
    cout << "\nEnding simulation" << endl;
    cout << "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" << endl;
    return 1;

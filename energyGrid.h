@@ -21,43 +21,40 @@ public:
    int nE;
    double Emax, dE;
    vector<double> Ecc, Ece; // Energy at cell-center and at cell-edge 
-   void setEnergyGrid(const string&);
+   //void setEnergyGrid(const string&);
+   void initialize(const Json::Value&);
 };
 
-void energyGrid::setEnergyGrid(const string& inputFile)
+void energyGrid::initialize(const Json::Value& root)
 {
-   Json::Value root; // will contain root value after parsing
-   Json::Reader reader;
    const Json::Value defValue; // used for default reference
- 
-   ifstream ifile(inputFile);
-   bool isJsonOK = (ifile !=NULL && reader.parse(ifile, root) );
-   if(isJsonOK) {
-      const Json::Value Egrid = root.get("Egrid",defValue);
-      if(Egrid.isObject()) {
-         printf("\nReading energy grid from file: %s %s",
-                inputFile.c_str(), "\n");
-         Json::Value EmaxVal = Egrid.get("Emax",defValue);
-         Json::Value nEVal = Egrid.get("nE",defValue);
-         if(EmaxVal == defValue || nEVal == defValue) {
-            printf("ERROR: Emax or nE not declared in input file\n");
-            exit (EXIT_FAILURE);
-         } 
-         nE = nEVal.asInt();
-         if(nE != nEVal.asDouble() || nE < 1) {
-            printf("ERROR: nE is not set as a positive integer in input file\n");
-            exit (EXIT_FAILURE);
-         }
-         Emax = EmaxVal.asDouble();
-         dE = Emax/nE;
+   const Json::Value Egrid = root.get("Egrid",defValue);
+   if(Egrid.isObject()) {
+      printf("\nInitializing energy grid ...\n");
+      Json::Value EmaxVal = Egrid.get("Emax",defValue);
+      Json::Value nEVal = Egrid.get("nE",defValue);
+      if(EmaxVal == defValue || nEVal == defValue) {
+         printf("ERROR: Emax or nE not declared in input file\n");
+         exit (EXIT_FAILURE);
+      } 
+      nE = nEVal.asInt();
+      if(nE != nEVal.asDouble() || nE < 1) {
+         printf("ERROR: nE is not set as a positive integer in input file\n");
+         exit (EXIT_FAILURE);
       }
-      else {
-         cout << "value for key \"Egrid\" is not object type !" << endl;
-      }
+      Emax = EmaxVal.asDouble();
+      dE = Emax/nE;
+      //
+      cout << "nE = " << nE << endl;
+      cout << "Emax = " << Emax << endl;
+      cout << "dE = " << dE << endl << endl;
+      //for (auto n = 0; n < Egrid.nE; n++) {
+      //   cout << "Ecc[" << n << "] = " << Egrid.Ecc[n] << endl;
+      //   cout << "Ece[" << n << "] = " << Egrid.Ece[n] << endl;
+      //}
    }
    else {
-      printf("ERROR: json is not OK ... input file not found? \n");
-      exit (EXIT_FAILURE);
+      cout << "value for key \"Egrid\" is not object type !" << endl;
    }
   
    //Ecc.reserve(nE);
