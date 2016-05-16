@@ -1,0 +1,16 @@
+{
+"Egrid":{
+         "Emax":100, // [eV]
+         "nE":1e4
+        },
+"Time" :{
+         "dtOut":2,    // output time intervals
+         "tOutSteps":5, // number of output setps
+         "Cm":0.9       // Courant multiplier
+       },
+"EEDF" :{
+         "Te":10,    // [eV]
+         "type":"Gaussian"
+       }
+}
+

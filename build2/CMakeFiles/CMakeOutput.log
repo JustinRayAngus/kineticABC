@@ -10,7 +10,7 @@ The output was:
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
 
-The C compiler identification is GNU, found in "/Users/angus/CPP_testing/firstCode/build/CMakeFiles/3.5.2/CompilerIdC/a.out"
+The C compiler identification is GNU, found in "/Users/angus/CPP_testing/firstCode/build2/CMakeFiles/3.5.2/CompilerIdC/a.out"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler: /opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9 
@@ -23,30 +23,30 @@ The output was:
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
 
-The CXX compiler identification is GNU, found in "/Users/angus/CPP_testing/firstCode/build/CMakeFiles/3.5.2/CompilerIdCXX/a.out"
+The CXX compiler identification is GNU, found in "/Users/angus/CPP_testing/firstCode/build2/CMakeFiles/3.5.2/CompilerIdCXX/a.out"
 
 Determining if the C compiler works passed with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_59595/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_59595.dir/build.make CMakeFiles/cmTC_59595.dir/build
-Building C object CMakeFiles/cmTC_59595.dir/testCCompiler.c.o
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3     -o CMakeFiles/cmTC_59595.dir/testCCompiler.c.o   -c /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_59595
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_59595.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_59595.dir/testCCompiler.c.o  -o cmTC_59595  
+Run Build Command:"/usr/bin/make" "cmTC_13231/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_13231.dir/build.make CMakeFiles/cmTC_13231.dir/build
+Building C object CMakeFiles/cmTC_13231.dir/testCCompiler.c.o
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3     -o CMakeFiles/cmTC_13231.dir/testCCompiler.c.o   -c /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_13231
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_13231.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_13231.dir/testCCompiler.c.o  -o cmTC_13231  
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_d2ac8/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_d2ac8.dir/build.make CMakeFiles/cmTC_d2ac8.dir/build
-Building C object CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3     -o CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o   -c /opt/local/share/cmake-3.5/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_d2ac8
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d2ac8.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o  -o cmTC_d2ac8   
+Run Build Command:"/usr/bin/make" "cmTC_d3398/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_d3398.dir/build.make CMakeFiles/cmTC_d3398.dir/build
+Building C object CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3     -o CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o   -c /opt/local/share/cmake-3.5/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_d3398
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d3398.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o  -o cmTC_d3398   
 Using built-in specs.
 COLLECT_GCC=/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3
 COLLECT_LTO_WRAPPER=/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/lto-wrapper
@@ -56,10 +56,10 @@ Thread model: posix
 gcc version 4.9.3 (MacPorts gcc49 4.9.3_0) 
 COMPILER_PATH=/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/libexec/gcc/x86_64-apple-darwin13/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/
 LIBRARY_PATH=/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../../:/usr/lib/
-COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.9.4' '-v' '-o' 'cmTC_d2ac8' '-mtune=core2'
- /opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2 -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_d2ac8 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v
+COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.9.4' '-v' '-o' 'cmTC_d3398' '-mtune=core2'
+ /opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2 -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_d3398 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v
 collect2 version 4.9.3
-/opt/local/bin/ld -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_d2ac8 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v
+/opt/local/bin/ld -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_d3398 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v
 @(#)PROGRAM:ld  PROJECT:ld64-253.3
 configured to support archs: i386 x86_64 x86_64h armv6 armv7 armv7s armv7m armv7k arm64 (tvOS)
 @(#)PROGRAM:ld  PROJECT:ld64-253.3
@@ -72,20 +72,20 @@ Library search paths:
 Framework search paths:
 	/Library/Frameworks/
 	/System/Library/Frameworks/
- /opt/local/bin/nm -n CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o
+ /opt/local/bin/nm -n CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o
 
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_d2ac8/fast"]
-  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_d2ac8.dir/build.make CMakeFiles/cmTC_d2ac8.dir/build]
-  ignore line: [Building C object CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3     -o CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o   -c /opt/local/share/cmake-3.5/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_d2ac8]
-  ignore line: [/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d2ac8.dir/link.txt --verbose=1]
-  ignore line: [/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o  -o cmTC_d2ac8   ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_d3398/fast"]
+  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_d3398.dir/build.make CMakeFiles/cmTC_d3398.dir/build]
+  ignore line: [Building C object CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3     -o CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o   -c /opt/local/share/cmake-3.5/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_d3398]
+  ignore line: [/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d3398.dir/link.txt --verbose=1]
+  ignore line: [/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o  -o cmTC_d3398   ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3]
   ignore line: [COLLECT_LTO_WRAPPER=/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/lto-wrapper]
@@ -95,8 +95,8 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 4.9.3 (MacPorts gcc49 4.9.3_0) ]
   ignore line: [COMPILER_PATH=/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/libexec/gcc/x86_64-apple-darwin13/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/]
   ignore line: [LIBRARY_PATH=/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../../:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.9.4' '-v' '-o' 'cmTC_d2ac8' '-mtune=core2']
-  link line: [ /opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2 -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_d2ac8 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v]
+  ignore line: [COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.9.4' '-v' '-o' 'cmTC_d3398' '-mtune=core2']
+  link line: [ /opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2 -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_d3398 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v]
     arg [/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2] ==> ignore
     arg [-dynamic] ==> ignore
     arg [-arch] ==> ignore
@@ -106,13 +106,13 @@ Parsed C implicit link information from above output:
     arg [-weak_reference_mismatches] ==> ignore
     arg [non-weak] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_d2ac8] ==> ignore
+    arg [cmTC_d3398] ==> ignore
     arg [-L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3] ==> dir [/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3]
     arg [-L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../..] ==> dir [/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../..]
     arg [-search_paths_first] ==> ignore
     arg [-headerpad_max_install_names] ==> ignore
     arg [-v] ==> ignore
-    arg [CMakeFiles/cmTC_d2ac8.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_d3398.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-no_compact_unwind] ==> ignore
     arg [-lSystem] ==> lib [System]
     arg [-lgcc_ext.10.5] ==> lib [gcc_ext.10.5]
@@ -141,15 +141,15 @@ Parsed C implicit link information from above output:
 
 
 Detecting C [-std=c11] compiler features compiled with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_0eb4e/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_0eb4e.dir/build.make CMakeFiles/cmTC_0eb4e.dir/build
-Building C object CMakeFiles/cmTC_0eb4e.dir/feature_tests.c.o
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -std=c11 -o CMakeFiles/cmTC_0eb4e.dir/feature_tests.c.o   -c /Users/angus/CPP_testing/firstCode/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_0eb4e
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0eb4e.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_0eb4e.dir/feature_tests.c.o  -o cmTC_0eb4e  
+Run Build Command:"/usr/bin/make" "cmTC_c9c6d/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_c9c6d.dir/build.make CMakeFiles/cmTC_c9c6d.dir/build
+Building C object CMakeFiles/cmTC_c9c6d.dir/feature_tests.c.o
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -std=c11 -o CMakeFiles/cmTC_c9c6d.dir/feature_tests.c.o   -c /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/feature_tests.c
+Linking C executable cmTC_c9c6d
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c9c6d.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_c9c6d.dir/feature_tests.c.o  -o cmTC_c9c6d  
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -159,15 +159,15 @@ Linking C executable cmTC_0eb4e
 
 
 Detecting C [-std=c99] compiler features compiled with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_916fc/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_916fc.dir/build.make CMakeFiles/cmTC_916fc.dir/build
-Building C object CMakeFiles/cmTC_916fc.dir/feature_tests.c.o
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -std=c99 -o CMakeFiles/cmTC_916fc.dir/feature_tests.c.o   -c /Users/angus/CPP_testing/firstCode/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_916fc
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_916fc.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_916fc.dir/feature_tests.c.o  -o cmTC_916fc  
+Run Build Command:"/usr/bin/make" "cmTC_11b46/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_11b46.dir/build.make CMakeFiles/cmTC_11b46.dir/build
+Building C object CMakeFiles/cmTC_11b46.dir/feature_tests.c.o
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -std=c99 -o CMakeFiles/cmTC_11b46.dir/feature_tests.c.o   -c /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/feature_tests.c
+Linking C executable cmTC_11b46
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_11b46.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_11b46.dir/feature_tests.c.o  -o cmTC_11b46  
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -177,15 +177,15 @@ Linking C executable cmTC_916fc
 
 
 Detecting C [-std=c90] compiler features compiled with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_48d19/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_48d19.dir/build.make CMakeFiles/cmTC_48d19.dir/build
-Building C object CMakeFiles/cmTC_48d19.dir/feature_tests.c.o
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -std=c90 -o CMakeFiles/cmTC_48d19.dir/feature_tests.c.o   -c /Users/angus/CPP_testing/firstCode/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_48d19
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_48d19.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_48d19.dir/feature_tests.c.o  -o cmTC_48d19  
+Run Build Command:"/usr/bin/make" "cmTC_3337b/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_3337b.dir/build.make CMakeFiles/cmTC_3337b.dir/build
+Building C object CMakeFiles/cmTC_3337b.dir/feature_tests.c.o
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -std=c90 -o CMakeFiles/cmTC_3337b.dir/feature_tests.c.o   -c /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/feature_tests.c
+Linking C executable cmTC_3337b
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3337b.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-gcc-4.9.3    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_3337b.dir/feature_tests.c.o  -o cmTC_3337b  
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -193,27 +193,27 @@ Linking C executable cmTC_48d19
     Feature record: C_FEATURE:0c_static_assert
     Feature record: C_FEATURE:0c_variadic_macros
 Determining if the CXX compiler works passed with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_7de08/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_7de08.dir/build.make CMakeFiles/cmTC_7de08.dir/build
-Building CXX object CMakeFiles/cmTC_7de08.dir/testCXXCompiler.cxx.o
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9      -o CMakeFiles/cmTC_7de08.dir/testCXXCompiler.cxx.o -c /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_7de08
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7de08.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_7de08.dir/testCXXCompiler.cxx.o  -o cmTC_7de08  
+Run Build Command:"/usr/bin/make" "cmTC_954a0/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_954a0.dir/build.make CMakeFiles/cmTC_954a0.dir/build
+Building CXX object CMakeFiles/cmTC_954a0.dir/testCXXCompiler.cxx.o
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9      -o CMakeFiles/cmTC_954a0.dir/testCXXCompiler.cxx.o -c /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_954a0
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_954a0.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_954a0.dir/testCXXCompiler.cxx.o  -o cmTC_954a0  
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_28db2/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_28db2.dir/build.make CMakeFiles/cmTC_28db2.dir/build
-Building CXX object CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9      -o CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o -c /opt/local/share/cmake-3.5/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_28db2
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_28db2.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_28db2   
+Run Build Command:"/usr/bin/make" "cmTC_9541f/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_9541f.dir/build.make CMakeFiles/cmTC_9541f.dir/build
+Building CXX object CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9      -o CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o -c /opt/local/share/cmake-3.5/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_9541f
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9541f.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_9541f   
 Using built-in specs.
 COLLECT_GCC=/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9
 COLLECT_LTO_WRAPPER=/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/lto-wrapper
@@ -223,10 +223,10 @@ Thread model: posix
 gcc version 4.9.3 (MacPorts gcc49 4.9.3_0) 
 COMPILER_PATH=/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/libexec/gcc/x86_64-apple-darwin13/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/
 LIBRARY_PATH=/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../../:/usr/lib/
-COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.9.4' '-v' '-o' 'cmTC_28db2' '-shared-libgcc' '-mtune=core2'
- /opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2 -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_28db2 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v
+COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.9.4' '-v' '-o' 'cmTC_9541f' '-shared-libgcc' '-mtune=core2'
+ /opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2 -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_9541f -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v
 collect2 version 4.9.3
-/opt/local/bin/ld -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_28db2 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v
+/opt/local/bin/ld -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_9541f -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v
 @(#)PROGRAM:ld  PROJECT:ld64-253.3
 configured to support archs: i386 x86_64 x86_64h armv6 armv7 armv7s armv7m armv7k arm64 (tvOS)
 @(#)PROGRAM:ld  PROJECT:ld64-253.3
@@ -239,20 +239,20 @@ Library search paths:
 Framework search paths:
 	/Library/Frameworks/
 	/System/Library/Frameworks/
- /opt/local/bin/nm -n CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o
+ /opt/local/bin/nm -n CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o
 
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_28db2/fast"]
-  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_28db2.dir/build.make CMakeFiles/cmTC_28db2.dir/build]
-  ignore line: [Building CXX object CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9      -o CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o -c /opt/local/share/cmake-3.5/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_28db2]
-  ignore line: [/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_28db2.dir/link.txt --verbose=1]
-  ignore line: [/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_28db2   ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_9541f/fast"]
+  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_9541f.dir/build.make CMakeFiles/cmTC_9541f.dir/build]
+  ignore line: [Building CXX object CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9      -o CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o -c /opt/local/share/cmake-3.5/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_9541f]
+  ignore line: [/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9541f.dir/link.txt --verbose=1]
+  ignore line: [/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_9541f   ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9]
   ignore line: [COLLECT_LTO_WRAPPER=/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/lto-wrapper]
@@ -262,8 +262,8 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 4.9.3 (MacPorts gcc49 4.9.3_0) ]
   ignore line: [COMPILER_PATH=/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/libexec/gcc/x86_64-apple-darwin13/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/]
   ignore line: [LIBRARY_PATH=/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/:/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../../:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.9.4' '-v' '-o' 'cmTC_28db2' '-shared-libgcc' '-mtune=core2']
-  link line: [ /opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2 -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_28db2 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v]
+  ignore line: [COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.9.4' '-v' '-o' 'cmTC_9541f' '-shared-libgcc' '-mtune=core2']
+  link line: [ /opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2 -dynamic -arch x86_64 -macosx_version_min 10.9.4 -weak_reference_mismatches non-weak -o cmTC_9541f -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3 -L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../.. -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -no_compact_unwind -lSystem -lgcc_ext.10.5 -lgcc -lSystem -v]
     arg [/opt/local/libexec/gcc/x86_64-apple-darwin13/4.9.3/collect2] ==> ignore
     arg [-dynamic] ==> ignore
     arg [-arch] ==> ignore
@@ -273,13 +273,13 @@ Parsed CXX implicit link information from above output:
     arg [-weak_reference_mismatches] ==> ignore
     arg [non-weak] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_28db2] ==> ignore
+    arg [cmTC_9541f] ==> ignore
     arg [-L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3] ==> dir [/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3]
     arg [-L/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../..] ==> dir [/opt/local/lib/gcc49/gcc/x86_64-apple-darwin13/4.9.3/../../..]
     arg [-search_paths_first] ==> ignore
     arg [-headerpad_max_install_names] ==> ignore
     arg [-v] ==> ignore
-    arg [CMakeFiles/cmTC_28db2.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_9541f.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-no_compact_unwind] ==> ignore
     arg [-lSystem] ==> lib [System]
@@ -309,15 +309,15 @@ Parsed CXX implicit link information from above output:
 
 
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_3ce26/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_3ce26.dir/build.make CMakeFiles/cmTC_3ce26.dir/build
-Building CXX object CMakeFiles/cmTC_3ce26.dir/feature_tests.cxx.o
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -std=c++14 -o CMakeFiles/cmTC_3ce26.dir/feature_tests.cxx.o -c /Users/angus/CPP_testing/firstCode/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_3ce26
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3ce26.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_3ce26.dir/feature_tests.cxx.o  -o cmTC_3ce26  
+Run Build Command:"/usr/bin/make" "cmTC_81db7/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_81db7.dir/build.make CMakeFiles/cmTC_81db7.dir/build
+Building CXX object CMakeFiles/cmTC_81db7.dir/feature_tests.cxx.o
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -std=c++14 -o CMakeFiles/cmTC_81db7.dir/feature_tests.cxx.o -c /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_81db7
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_81db7.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_81db7.dir/feature_tests.cxx.o  -o cmTC_81db7  
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -380,15 +380,15 @@ Linking CXX executable cmTC_3ce26
 
 
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a6c53/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_a6c53.dir/build.make CMakeFiles/cmTC_a6c53.dir/build
-Building CXX object CMakeFiles/cmTC_a6c53.dir/feature_tests.cxx.o
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -std=c++11 -o CMakeFiles/cmTC_a6c53.dir/feature_tests.cxx.o -c /Users/angus/CPP_testing/firstCode/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_a6c53
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a6c53.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_a6c53.dir/feature_tests.cxx.o  -o cmTC_a6c53  
+Run Build Command:"/usr/bin/make" "cmTC_e9f2d/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_e9f2d.dir/build.make CMakeFiles/cmTC_e9f2d.dir/build
+Building CXX object CMakeFiles/cmTC_e9f2d.dir/feature_tests.cxx.o
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -std=c++11 -o CMakeFiles/cmTC_e9f2d.dir/feature_tests.cxx.o -c /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_e9f2d
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e9f2d.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_e9f2d.dir/feature_tests.cxx.o  -o cmTC_e9f2d  
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -451,15 +451,15 @@ Linking CXX executable cmTC_a6c53
 
 
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
-Change Dir: /Users/angus/CPP_testing/firstCode/build/CMakeFiles/CMakeTmp
+Change Dir: /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_447f6/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_447f6.dir/build.make CMakeFiles/cmTC_447f6.dir/build
-Building CXX object CMakeFiles/cmTC_447f6.dir/feature_tests.cxx.o
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -std=c++98 -o CMakeFiles/cmTC_447f6.dir/feature_tests.cxx.o -c /Users/angus/CPP_testing/firstCode/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_447f6
-/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_447f6.dir/link.txt --verbose=1
-/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_447f6.dir/feature_tests.cxx.o  -o cmTC_447f6  
+Run Build Command:"/usr/bin/make" "cmTC_ae06a/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_ae06a.dir/build.make CMakeFiles/cmTC_ae06a.dir/build
+Building CXX object CMakeFiles/cmTC_ae06a.dir/feature_tests.cxx.o
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -std=c++98 -o CMakeFiles/cmTC_ae06a.dir/feature_tests.cxx.o -c /Users/angus/CPP_testing/firstCode/build2/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_ae06a
+/opt/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ae06a.dir/link.txt --verbose=1
+/opt/local/bin/x86_64-apple-darwin13-g++-mp-4.9     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_ae06a.dir/feature_tests.cxx.o  -o cmTC_ae06a  
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers

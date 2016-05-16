@@ -12,20 +12,22 @@
 #include <string>
 #include <fstream>
 #include "json/json.h"
+#include "HDF5dataFile.h"
 
 using namespace std;
 
 class energyGrid
 {
+
 public:
-   int nE;
-   double Emax, dE;
-   vector<double> Ecc, Ece; // Energy at cell-center and at cell-edge 
-   //void setEnergyGrid(const string&);
-   void initialize(const Json::Value&);
+  int nE;
+  double Emax, dE;
+  vector<double> Ecc, Ece; // Energy at cell-center and at cell-edge 
+  void initialize(const Json::Value&, HDF5dataFile&);
+
 };
 
-void energyGrid::initialize(const Json::Value& root)
+void energyGrid::initialize(const Json::Value& root, HDF5dataFile& dataFile)
 {
    const Json::Value defValue; // used for default reference
    const Json::Value Egrid = root.get("Egrid",defValue);
@@ -47,7 +49,7 @@ void energyGrid::initialize(const Json::Value& root)
       //
       cout << "nE = " << nE << endl;
       cout << "Emax = " << Emax << endl;
-      cout << "dE = " << dE << endl << endl;
+      cout << "dE = " << dE << endl;
       //for (auto n = 0; n < Egrid.nE; n++) {
       //   cout << "Ecc[" << n << "] = " << Egrid.Ecc[n] << endl;
       //   cout << "Ece[" << n << "] = " << Egrid.Ece[n] << endl;
@@ -66,7 +68,9 @@ void energyGrid::initialize(const Json::Value& root)
       Ece[n] = n*dE;
    }
    Ece[nE] = Emax;
-   // cout << Ecc.size() << endl; // always gives 0????
+   dataFile.add(Ecc, "Ecc", 0);
+   dataFile.add(Ece, "Ece", 0);
+   cout << endl;
 }
 
 
