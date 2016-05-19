@@ -23,6 +23,7 @@ public:
   int nE;
   double Emax, dE;
   vector<double> Ecc, Ece; // Energy at cell-center and at cell-edge 
+  
   void initialize(const Json::Value&, HDF5dataFile&);
 
 };
@@ -72,6 +73,5 @@ void energyGrid::initialize(const Json::Value& root, HDF5dataFile& dataFile)
    dataFile.add(Ece, "Ece", 0);
    cout << endl;
 }
-
 
 #endif

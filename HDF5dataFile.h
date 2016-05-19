@@ -324,8 +324,7 @@ void HDF5dataFile::appendSclInOutput(double* varData, const char* varName)
    fspace.selectHyperslab(H5S_SELECT_SET, dimsappend, offset);
    DataSpace mspace(RANK,dimsappend);
    dataset.write(varData, varType, mspace, fspace);
-   cout << "Extendable scalar " << varName << " updated in "
- 	<< outputFile << endl; 
+   //cout << "Extendable scalar " << varName << " updated in " << outputFile << endl; 
 	
    // close opened stuff
    //
@@ -383,8 +382,7 @@ void HDF5dataFile::appendVecInOutput(vector<double>* varData, const char* varNam
    fspace.selectHyperslab(H5S_SELECT_SET, dimsappend, offset);
    DataSpace mspace(RANK,dimsappend);
    dataset.write(data, varType, mspace, fspace);
-   cout << "Extendable vector " << varName << " updated in " 
- 	    << outputFile << endl; 
+   //cout << "Extendable vector " << varName << " updated in " << outputFile << endl; 
 	
    // close opened stuff
    //

@@ -22,10 +22,11 @@ class timeDomain
 public:
   double dtOut, tOutSteps;   // Output intervals and number of steps
   double Cm, tmax;           // Courant multiplier and max time
+  double dtSim;              // Simulation time-step
   vector<double> tOutVec;        // vector of output times
   double tOut;           // current output time 
-  void initialize(const Json::Value&, HDF5dataFile&);
   
+  void initialize(const Json::Value&, HDF5dataFile&);
   void updatetOut(double thistOut);
 
 };

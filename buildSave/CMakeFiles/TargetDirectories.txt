@@ -1,3 +1,0 @@
-/Users/angus/CPP_testing/firstCode/build/CMakeFiles/edit_cache.dir
-/Users/angus/CPP_testing/firstCode/build/CMakeFiles/rebuild_cache.dir
-/Users/angus/CPP_testing/firstCode/build/CMakeFiles/test.dir
