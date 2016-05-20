@@ -184,7 +184,8 @@ void HDF5dataFile::writeScl(const double& varData, const char* varName, const bo
            
       // close opened stuff
       //
-      dataset.close();      
+      dataset.close();  
+      mdataspace.close();    
       dataspace.close();
       file.close();   
    }
@@ -257,7 +258,8 @@ void HDF5dataFile::writeVec(const vector<double>& varData, const char* varName, 
            
       // close opened stuff
       //
-      dataset.close();      
+      dataset.close();
+      mdataspace.close();      
       dataspace.close();
       file.close();   
    }
@@ -296,7 +298,6 @@ void HDF5dataFile::appendSclInOutput(double* varData, const char* varName)
    fileID = H5Fopen(outputFile.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
    dsetID = H5Dopen(fileID, varName, H5P_DEFAULT);
    dspaceID = H5Dget_space(dsetID);
-   
    // get dimensions of extendable dataset
    //
    const int ndims = H5Sget_simple_extent_ndims(dspaceID);
@@ -328,6 +329,8 @@ void HDF5dataFile::appendSclInOutput(double* varData, const char* varName)
 	
    // close opened stuff
    //
+   H5Fclose(fileID);  
+   H5Fclose(dsetID);  
    dataset.close();      
    fspace.close();
    mspace.close();
@@ -386,6 +389,8 @@ void HDF5dataFile::appendVecInOutput(vector<double>* varData, const char* varNam
 	
    // close opened stuff
    //
+   H5Fclose(fileID);  
+   H5Fclose(dsetID);  
    dataset.close();      
    fspace.close();
    mspace.close();

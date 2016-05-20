@@ -56,6 +56,22 @@ vector
 H5Cpp.h
 /Users/angus/CPP_testing/firstCode/H5Cpp.h
 
+/Users/angus/CPP_testing/firstCode/electricField.h
+iostream
+-
+vector
+-
+string
+-
+fstream
+-
+math.h
+-
+json/json.h
+/Users/angus/CPP_testing/firstCode/json/json.h
+HDF5dataFile.h
+/Users/angus/CPP_testing/firstCode/HDF5dataFile.h
+
 /Users/angus/CPP_testing/firstCode/energyGrid.h
 iostream
 -
@@ -237,6 +253,8 @@ timeDomain.h
 /Users/angus/CPP_testing/firstCode/timeDomain.h
 Gas.h
 /Users/angus/CPP_testing/firstCode/Gas.h
+electricField.h
+/Users/angus/CPP_testing/firstCode/electricField.h
 HDF5dataFile.h
 /Users/angus/CPP_testing/firstCode/HDF5dataFile.h
 EEDF.h

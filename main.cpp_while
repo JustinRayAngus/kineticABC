@@ -10,7 +10,6 @@
 #include "energyGrid.h"
 #include "timeDomain.h"
 #include "Gas.h"
-#include "electricField.h"
 #include "HDF5dataFile.h"
 #include "EEDF.h"
 
@@ -67,11 +66,8 @@ int main(int argc, char** argv) {
    
    // determine E[V/m] for const Qelm
    //
-   electricField ElcField;
-   ElcField.initialize(inputRoot, dataFile);
-   //const double EVpm = eedf.Te0*gas.Ng*gas.Qelm[1]*sqrt(3.0*gas.mM); 
-   const double EVpm = ElcField.EVpm; 
-   //cout << "E = " << EVpm << " [V/m] " << endl << endl;
+   const double EVpm = eedf.Te0*gas.Ng*gas.Qelm[1]*sqrt(3.0*gas.mM); 
+   cout << "E = " << EVpm << " [V/m] " << endl << endl;
      
 
    // compute flux at cell-edges using initial F0
@@ -79,7 +75,7 @@ int main(int argc, char** argv) {
    eedf.computeFlux(gas, Egrid, EVpm);
 
 
-   // march forward in time
+   // write outputs at specified times
    //
    const double dtSim = eedf.dtStable*tDom.Cm;
    cout << "Stable time step: " << eedf.dtStable << endl;
@@ -98,6 +94,8 @@ int main(int argc, char** argv) {
          thistOutInt = thistOutInt+1;
       }
    }
+   //dataFile.writeAll(); // appends extendable outputs
+   //dataFile.writeAll(); // appends extendable outputs again
 
 
    cout << "\nEnding simulation" << endl;

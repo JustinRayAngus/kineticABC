@@ -11,6 +11,7 @@ CMakeFiles/test.dir/jsoncpp.cpp.o: /Users/angus/jsoncpp-master/include/json/writ
 CMakeFiles/test.dir/main.cpp.o: ../EEDF.h
 CMakeFiles/test.dir/main.cpp.o: ../Gas.h
 CMakeFiles/test.dir/main.cpp.o: ../HDF5dataFile.h
+CMakeFiles/test.dir/main.cpp.o: ../electricField.h
 CMakeFiles/test.dir/main.cpp.o: ../energyGrid.h
 CMakeFiles/test.dir/main.cpp.o: ../json/json.h
 CMakeFiles/test.dir/main.cpp.o: ../main.cpp

@@ -23,9 +23,9 @@ using namespace std;
 class EEDF
 {
 public:
-   double Te0;        // Te;
-   string type0;      // initial type of EEDF
-   vector<double> F0; // EEDF
+   double zeroMom, Te0;   // zero momentum, Te;
+   string type0;          // initial type of EEDF
+   vector<double> F0;     // EEDF
    vector<double> W, D, Flux;  // Energy space adv, diff, and flux at cell-edge
    
    double dtStable;  // stable time-step
@@ -57,10 +57,12 @@ void EEDF::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5data
          exit (EXIT_FAILURE);
       }
       type0 = type.asString();
-      if(type0=="gaussian" || type0=="Gaussian") {
-         cout << "Initial EEDF is Gaussian with Te = " << Te0 << endl;
+      if(type0=="maxwellian" || type0=="Maxwellian") {
+         cout << "Initial EEDF is Maxwellian with Te = " << Te0 << endl;
+         zeroMom = 0;
          for (auto n=0; n<Egrid.nE; n++) {
             F0[n] = 2.0/sqrt(Te0*3.14159)/Te0*exp(-Egrid.Ecc[n]/Te0);
+            zeroMom = zeroMom + sqrt(Egrid.Ecc[n])*F0[n]*Egrid.dE;
          }
       }
       else {
@@ -77,6 +79,7 @@ void EEDF::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5data
    dataFile.add(Flux, "Flux", 1); //Flux = WF - D*dF/dE
    dataFile.add(W, "W", 1);  // advection coefficient
    dataFile.add(D, "D", 1);  // diffusion coefficient
+   dataFile.add(zeroMom, "zeroMom", 1); // should remain at one always !!! 
    dataFile.add(Te0, "Te0", 1); 
    cout << endl;  
 }
@@ -147,9 +150,13 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
 
 void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
 {
+   Te0 = 0;
+   zeroMom = 0;
    const int nmax= F0.size();
    for (auto n=0; n<nmax; n++) {
-      F0[n] = F0[n] + dt*(Flux[n]-Flux[n+1])/sqrt(Egrid.Ecc[n]);
+      F0[n] = F0[n] + dt*(Flux[n]-Flux[n+1])/Egrid.dE/sqrt(Egrid.Ecc[n]);
+      Te0 = Te0 + 2.0/3.0*pow(Egrid.Ecc[n],1.5)*F0[n]*Egrid.dE;
+      zeroMom = zeroMom + sqrt(Egrid.Ecc[n])*F0[n]*Egrid.dE;
    }
    
 }
