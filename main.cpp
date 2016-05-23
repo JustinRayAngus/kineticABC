@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
    cout << "" << endl;
    cout << "Initiating simulation" << endl;
 
-   
+
    // Parse the specified json input file
    //
    const string inputFile = "../input.json";
@@ -98,7 +98,6 @@ int main(int argc, char** argv) {
          thistOutInt = thistOutInt+1;
       }
    }
-
 
    cout << "\nEnding simulation" << endl;
    cout << "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" << endl;

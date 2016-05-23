@@ -15,8 +15,6 @@ F0 = hdf5read(thisFile,'F0');
 zeroMom = hdf5read(thisFile,'zeroMom');
 Te0 = hdf5read(thisFile,'Te0');
 t   = hdf5read(thisFile,'tout');
-Qelm = max(hdf5read(thisFile,'Qelm')); % [m^2]
-Ng = hdf5read(thisFile,'Ng'); % 1/m^3
 Flux = hdf5read(thisFile,'Flux');
 W = hdf5read(thisFile,'W');
 D = hdf5read(thisFile,'D');
@@ -63,20 +61,33 @@ mom2 = sum(Ecc.*sqrt(Ecc).*F0(:,1))*(Ecc(2)-Ecc(1)); % should be 3/2*Te
 % var = hdf5read(thisFile,'ExtendibleArray')';
 % display(var);
 
-Ez = hdf5read(thisFile,'E');  % [V/m]
+Ez = hdf5read(thisFile,'E');      % [V/m]
 mM = hdf5read(thisFile,'mM');
-VE4 = Ez^2/(3*Ng^2*Qelm^2)/mM;
-VE2 = sqrt(VE4);
+Ng = hdf5read(thisFile,'Ng');     % [1/m^3]
+Qelm = hdf5read(thisFile,'Qelm'); % [m^2]
+Qexc = hdf5read(thisFile,'Qexc');
 
-A = 25.6909/(2*pi*VE2).^1.5; 
-FSoln = A*exp(-(Ecc/VE2).^2);
+exponent = zeros(size(Qelm));
+deltaE = Ece(2)-Ece(1);
+for i = 2:length(Qelm)
+    thisval = -6*Ng^2*mM/Ez^2*Ece(i)*Qelm(i)^2*deltaE;
+    exponent(i) = exponent(i-1)+thisval;
+end
+FSoln = exp(exponent);
+normC = sum(sqrt(Ece).*FSoln*deltaE);
+FSoln = FSoln/normC;
+
+%VE4 = Ez^2/(3*Ng^2*max(Qelm)^2)/mM;
+%VE2 = sqrt(VE4);
+%A = 25.6909/(2*pi*VE2).^1.5; 
+%FSoln = A*exp(-(Ecc/VE2).^2);
 %sum(sqrt(Ecc).*Fsoln.*(Ecc(2)-Ecc(1)))
-TeSoln = 2/3*sum(sqrt(Ecc.^3).*FSoln.*(Ecc(2)-Ecc(1)));
-figure(2); hold on; plot(Ecc,sqrt(Ecc).*FSoln,'black--');
+TeSoln = 2/3*sum(sqrt(Ece.^3).*FSoln.*deltaE);
+figure(2); hold on; plot(Ece,sqrt(Ece).*FSoln,'black--');
 formatSpec = '%10.2e\n';
 legend('t=0',['t=',num2str(t(round(nt/8)),formatSpec)], ...
        ['t=',num2str(t(round(nt/4)),formatSpec)], ...
-       ['t=',num2str(t(nt),formatSpec)],'Soln'); axis([0 60 0 1.1*max(sqrt(Ecc).*FSoln)]);
+       ['t=',num2str(t(nt),formatSpec)],'Soln'); axis([0 60 0 1.1*max(sqrt(Ece).*FSoln)]);
 
 figure(2);
 subplot(1,2,2);

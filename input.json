@@ -4,9 +4,9 @@
          "nE":1e3
         },
 "Time" :{
-         "dtOut":1e-5,     // output time intervals
+         "dtOut":2e-6,     // output time intervals
          "tOutSteps":20,   // number of output setps
-         "Cm":10           // Courant multiplier
+         "Cm":90.0           // Courant multiplier
        },
 "EEDF" :{
          "Te":10,    // initial electron temp [eV]
@@ -15,10 +15,12 @@
 "Gas"  :{
          "Tg":300,  // initial gas temp [K]
          "Pg":1,       // initial gas press [Torr]
-         "name":"Nitrogen"
+         "name":"Nitrogen",
+         //"xsecsFile":"../xsecsConst.txt"
+         "xsecsFile":"../xsecsN2.txt"
        },
 "ElectricField"  :{
-         "E":30  // electric field [V/m]
+         "E":300  // electric field [V/m]
        }
 }
 
