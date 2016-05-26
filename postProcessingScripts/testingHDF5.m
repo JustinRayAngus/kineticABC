@@ -3,7 +3,7 @@
 %   looking at hdf5 output file
 %
 %%%
-clear all;
+%clear all;
 
 filePath = '../build/';
 fileName = 'output.h5';
@@ -16,20 +16,23 @@ zeroMom = hdf5read(thisFile,'zeroMom');
 Te0 = hdf5read(thisFile,'Te0');
 t   = hdf5read(thisFile,'tout');
 Flux = hdf5read(thisFile,'Flux');
+ExcS = hdf5read(thisFile,'ExcS');
 W = hdf5read(thisFile,'W');
+W = W(:,2);
 D = hdf5read(thisFile,'D');
+D = D(:,2);
 %display(Ecc);
 %display(Ece);
 %display(Te0);
 
 nt = length(F0(1,:));
-close(figure(2)); f2=figure(2); set(f2,'position',[0 100 1000 400]);
+close(figure(4)); f4=figure(4); set(f4,'position',[0 100 1000 400]);
 subplot(1,2,1); 
-plot(Ecc,sqrt(Ecc).*F0(:,1)); xlabel('\epsilon [eV]'); ylabel('\epsilon^1^/^2F_0 [1/eV]');
+semilogy(Ecc,F0(:,1)); xlabel('\epsilon [eV]'); ylabel('\epsilon^1^/^2F_0 [1/eV]');
 title('EEDF evolution');
-hold on; plot(Ecc,sqrt(Ecc).*F0(:,round(nt/8)),'magenta');
-hold on; plot(Ecc,sqrt(Ecc).*F0(:,round(nt/4)),'color',[0 0.5 0]);
-hold on; plot(Ecc,sqrt(Ecc).*F0(:,nt),'r');
+hold on; plot(Ecc,F0(:,round(nt/4)),'magenta');
+hold on; plot(Ecc,F0(:,round(nt/2)),'color',[0 0.5 0]);
+hold on; plot(Ecc,F0(:,nt),'r');
 
 mom0 = sum(sqrt(Ecc).*F0(:,1))*(Ecc(2)-Ecc(1)); % should be one
 mom2 = sum(Ecc.*sqrt(Ecc).*F0(:,1))*(Ecc(2)-Ecc(1)); % should be 3/2*Te
@@ -43,16 +46,14 @@ mom2 = sum(Ecc.*sqrt(Ecc).*F0(:,1))*(Ecc(2)-Ecc(1)); % should be 3/2*Te
 % xlabel('\epsilon [eV]'); ylabel('Flux');
 % title('RHS Flux term');
 
-% dFlux = zeros(size(Ecc));
-% for i = 1:length(Ecc)
-%     dFlux(i) = Flux(i+1,2)-Flux(i,2);
-% end
-% 
-% close(figure(4)); 
-% f4=figure(4);
-% plot(Ecc,-dFlux/(Ecc(2)-Ecc(1)),'r--'); xlabel('\epsilon [eV]'); 
-% ylabel('-dFlux');
-% title('RHS Flux term');
+dFlux = zeros(length(Ecc),length(Flux(1,:)));
+deltaE = Ecc(2)-Ecc(1);
+for i = 1:length(Ecc)
+    dFlux(i,:) = (Flux(i+1,:)-Flux(i,:))/(deltaE*sqrt(Ecc(i)));
+end
+close(figure(1));
+figure(1); loglog(Ecc,abs(dFlux(:,nt)),'b',Ecc,abs(ExcS(:,nt)),'r');
+legend('div Flux','Source');
 
 % filePath = '../build/';
 % fileName = 'outputTest.h5';
@@ -66,6 +67,7 @@ mM = hdf5read(thisFile,'mM');
 Ng = hdf5read(thisFile,'Ng');     % [1/m^3]
 Qelm = hdf5read(thisFile,'Qelm'); % [m^2]
 Qexc = hdf5read(thisFile,'Qexc');
+Uexc = hdf5read(thisFile,'Uexc');
 
 exponent = zeros(size(Qelm));
 deltaE = Ece(2)-Ece(1);
@@ -77,23 +79,25 @@ FSoln = exp(exponent);
 normC = sum(sqrt(Ece).*FSoln*deltaE);
 FSoln = FSoln/normC;
 
+figure(4);
 %VE4 = Ez^2/(3*Ng^2*max(Qelm)^2)/mM;
 %VE2 = sqrt(VE4);
 %A = 25.6909/(2*pi*VE2).^1.5; 
 %FSoln = A*exp(-(Ecc/VE2).^2);
 %sum(sqrt(Ecc).*Fsoln.*(Ecc(2)-Ecc(1)))
 TeSoln = 2/3*sum(sqrt(Ece.^3).*FSoln.*deltaE);
-figure(2); hold on; plot(Ece,sqrt(Ece).*FSoln,'black--');
+%figure(3); hold on; plot(Ece,sqrt(Ece).*FSoln,'black--');
 formatSpec = '%10.2e\n';
-legend('t=0',['t=',num2str(t(round(nt/8)),formatSpec)], ...
-       ['t=',num2str(t(round(nt/4)),formatSpec)], ...
-       ['t=',num2str(t(nt),formatSpec)],'Soln'); axis([0 60 0 1.1*max(sqrt(Ece).*FSoln)]);
+legend('t=0',['t=',num2str(t(round(nt/4)),formatSpec)], ...
+       ['t=',num2str(t(round(nt/2)),formatSpec)], ...
+       ['t=',num2str(t(nt),formatSpec)],'Elm Soln'); 
+   %axis([0 60 0 1.1*max(sqrt(Ece).*FSoln)]);
 
-figure(2);
+figure(4);
 subplot(1,2,2);
 plot(t,zeroMom,'b',t,Te0,'r'); 
 hold on ;plot(t,0*t+TeSoln,'black--');
 xlabel('t [s]'); ylabel('Moments');
 axis([0 max(t) 0 1.1*max(Te0)]);
-legend('zero', 'Te', 'Soln');
+legend('zero', 'Te', 'Elm only Soln');
 title('Evolution of moments');

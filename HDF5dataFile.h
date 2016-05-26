@@ -25,6 +25,7 @@ public:
     
    void add(double &sclVar, const char *varName, int grow = 0);
    void add(vector<double> &vecVar, const char *varName, int grow = 0); 
+   void add(vector<vector<double>> &vecVar, const char *varName, int grow = 0); 
    
    void writeAll(); // appends all growing variables in output file
 
@@ -36,6 +37,7 @@ private:
    
    void writeScl(const double&, const char*, const bool&);   
    void writeVec(const vector<double>&, const char*, const bool&);  
+   void writeVecVec(const vector<vector<double>>&, const char*, const bool&); 
    
    void appendVecInOutput(vector<double>*, const char*);
    void appendSclInOutput(double*, const char*);
@@ -48,6 +50,7 @@ private:
       };
    vector< VarStr<double> > sclVar_arr;
    vector< VarStr< vector<double> > > vecVar_arr;
+   vector< VarStr< vector<vector<double>> > > vecvecVar_arr;
 
 };
 
@@ -89,6 +92,22 @@ void HDF5dataFile::add(vector<double> &varData, const char *varName, int grow)
 
    vecVar_arr.push_back(vec); // add variable to the list
    writeVec(varData, varName, grow); // add variable to the output file
+}
+
+void HDF5dataFile::add(vector<vector<double>> &varData, const char *varName, int grow) 
+{
+   if(varAdded(string(varName))) {
+      cout << "ERROR: Output variable " << string(varName) << " already added to datafile " << endl;
+      exit (EXIT_FAILURE);
+   }
+   VarStr< vector<vector<double>> > vecvec;
+
+   vecvec.ptr  = &varData;
+   vecvec.name = string(varName);
+   vecvec.grow = (grow>0) ? true:false;
+
+   vecvecVar_arr.push_back(vecvec); // add variable to the list
+   writeVecVec(varData, varName, grow); // add variable to the output file
 }
 
 void HDF5dataFile::writeAll()
@@ -139,6 +158,12 @@ bool HDF5dataFile::varAdded(const string &name)
       if(name == it->name)
          return true;
    }
+   
+   for(vector< VarStr< vector<vector<double>> > >::iterator it = vecvecVar_arr.begin(); it != vecvecVar_arr.end(); it++) {
+      if(name == it->name)
+         return true;
+   }
+   
    return false;
 }
 
@@ -281,6 +306,86 @@ void HDF5dataFile::writeVec(const vector<double>& varData, const char* varName, 
       file.close();     
    }
 }
+
+
+void HDF5dataFile::writeVecVec(const vector<vector<double>>& varData, const char* varName, const bool& growVar)
+{     
+   // Open file and check to see if output variable already exists
+   //
+   H5File file(outputFile.c_str(), H5F_ACC_RDWR);
+   if(varExists(file,varName)) { // redundant, already checked in parent function
+      cout << "ERROR: Output variable " << varName << " already exists " << endl;
+	  exit (EXIT_FAILURE);
+   }
+   
+   // Need to copy vectors to an array for writing purposes
+   //
+   int RANK;
+   PredType varType = PredType::NATIVE_DOUBLE;
+   const int numVars = varData.size(); //cout << varData.size() << endl;
+   const int Nvar = varData[0].size();
+   double data[numVars][Nvar];
+   for (auto j=0; j<numVars; j++) {
+      vector<double> thisvarData = varData[j];
+      for (int i=0; i<Nvar; i++) {
+         data[j][i] = thisvarData[i];
+      } 
+   }
+    
+//    if(growVar) { // create extendable dataset
+//       
+//       RANK = 2;
+//       hsize_t dimsf[RANK];
+//       dimsf[0] = Nvar; 
+//       dimsf[1] = numVars;
+//       hsize_t mdimsf[RANK] = {H5S_UNLIMITED, varData.size()};
+//       DataSpace mdataspace(RANK, dimsf, mdimsf); // memory dataspace
+//       
+//       DSetCreatPropList cparms;
+//       hsize_t chunk_dims[2]={1,varData.size()}; // chunk size doesn't effect here
+//       cparms.setChunk(RANK,chunk_dims);
+//       
+//       DataType datatype(varType);
+//       DataSet dataset = file.createDataSet(varName, datatype, mdataspace, cparms);
+//       
+//       hsize_t size[RANK] = {1,varData.size()};
+//       dataset.extend(size);
+//       DataSpace dataspace = dataset.getSpace();
+//       hsize_t offset[RANK] = {0,0};
+//       hsize_t dims[RANK] = {1,varData.size()};
+//       dataspace.selectHyperslab(H5S_SELECT_SET,dims,offset); // data dataspace
+//                
+//       dataset.write(data, varType, mdataspace, dataspace);
+//       cout << "Extendable vector " << varName << " added to " << outputFile << endl;    
+//            
+//       // close opened stuff
+//       //
+//       dataset.close();
+//       mdataspace.close();      
+//       dataspace.close();
+//       file.close();   
+//    }
+//    else { // create non-extendable dataset
+   
+      RANK = 2;
+      hsize_t dimsf[RANK];
+      dimsf[0] = numVars;
+      dimsf[1] = Nvar;
+      DataSpace dataspace(RANK, dimsf);
+      DataType datatype(varType);
+      DataSet dataset = file.createDataSet(varName, datatype, dataspace);
+      dataset.write(data, varType);
+      cout << "Non-extendable vector vector " << varName << " added to " << outputFile << endl;   
+           
+      // close opened stuff
+      //
+      dataset.close();      
+      dataspace.close();
+      file.close();     
+//   }
+}
+
+
 
 void HDF5dataFile::appendSclInOutput(double* varData, const char* varName)
 {  

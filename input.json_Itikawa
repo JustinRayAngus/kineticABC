@@ -4,12 +4,12 @@
          "nE":2e3
         },
 "Time" :{
-         "dtOut":2e-9,     // output time intervals
+         "dtOut":5e-9,     // output time intervals
          "tOutSteps":20,   // number of output setps
-         "Cm":1           // Courant multiplier
+         "Cm":0.2           // Courant multiplier
        },
 "EEDF" :{
-         "Te":4,    // initial electron temp [eV]
+         "Te":10,    // initial electron temp [eV]
          "type":"Maxwellian"
        },
 "Gas"  :{
@@ -20,7 +20,7 @@
          //"xsecsFile":"../xsecsN2_test2.txt"
        },
 "ElectricField"  :{
-         "E":1e3  // electric field [V/m]
+         "E":1e2  // electric field [V/m]
        }
 }
 

@@ -77,6 +77,7 @@ int main(int argc, char** argv) {
    // compute flux at cell-edges using initial F0
    //
    eedf.computeFlux(gas, Egrid, EVpm);
+   eedf.computeExcS(gas, Egrid);
 
 
    // march forward in time
@@ -86,11 +87,18 @@ int main(int argc, char** argv) {
    cout << "Simulation time step: " << dtSim << endl << endl;        
    double thist = 0;
    int thistOutInt = 1;
-
+   
+   //dataFile.writeAll(); // append extendable outputs
+   ///*
    while(thist<tDom.tmax) {
       thist = thist + dtSim;
-      eedf.advanceF0(Egrid, dtSim);
-      eedf.computeFlux(gas, Egrid, EVpm);
+      eedf.F0old = eedf.F0;
+      eedf.F0half = eedf.F0;
+      for (auto i=0; i<5; i++) { // predict-correct iterations
+         eedf.advanceF0(Egrid, dtSim);
+         eedf.computeFlux(gas, Egrid, EVpm);
+         eedf.computeExcS(gas, Egrid);
+      }
       if(thist >= tDom.tOutVec[thistOutInt]) {
          tDom.updatetOut(thist);
          dataFile.writeAll(); // append extendable outputs
@@ -98,7 +106,7 @@ int main(int argc, char** argv) {
          thistOutInt = thistOutInt+1;
       }
    }
-
+   //*/   
    cout << "\nEnding simulation" << endl;
    cout << "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" << endl;
    return 1;

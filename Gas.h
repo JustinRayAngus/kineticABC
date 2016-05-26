@@ -25,8 +25,8 @@ public:
    string gasName;      // gas species name
    vector<double> Qelm; // elastic-momentum-transfer cross section [m^2]
    double mM;           // electron mass / gas species mass
-   vector<double> Qexc; // electronic-excitation cross section [m^2]
-   double Uexc;
+   vector<vector<double>> Qexc; // electronic-excitation cross section [m^2]
+   vector<double> Uexc;         // transition thresholds [eV]
    vector<double> Qvib; // vibrational-excitation cross section [m^2]
    double Uvib;
    vector<double> Qizn; // ionization cross section [m^2]
@@ -48,7 +48,9 @@ private:
 void Gas::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5dataFile& dataFile)
 {
    Qelm.assign(Egrid.nE+1,0.0);
-   Qexc.assign(Egrid.nE+1,0.0);
+   //Qexc.assign(Egrid.nE+1,0.0);
+   Qexc.resize(1,vector<double>(Egrid.nE+1,0.0));
+   Uexc.assign(1,0.0);
    Qmom.assign(Egrid.nE+1,0.0);
    const Json::Value defValue; // used for default reference
    const Json::Value Gas = root.get("Gas",defValue);
@@ -87,10 +89,17 @@ void Gas::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5dataF
          cout << "xsecs file = " << xsecsFile << endl;
          loadXsecs(Egrid, xsecsFile);
          
-//          const int nQelm = Qelm.size();
-//          for (int n=0; n<nQelm; n++) {
-//             Qelm[n] = 5.0e-20;
-//          }
+         const int nQ = Qmom.size();
+         const int nExc = Qexc.size();
+         vector<double> thisQexc;
+         Qmom = Qelm;
+         for (auto m=0; m<nExc; m++) {
+            thisQexc = Qexc[m];
+            for (auto n=0; n<nQ; n++) {
+               Qmom[n] += thisQexc[n];
+            }
+         }
+         
       }
       else {
          cout << "Gas species " << gasName << " is not a valid option" << endl;
@@ -105,9 +114,11 @@ void Gas::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5dataF
    dataFile.add(Tg, "Tg", 0);
    dataFile.add(Pg, "Pg", 0);
    dataFile.add(Ng, "Ng", 0);
-   dataFile.add(mM, "mM", 0);
    dataFile.add(Qelm, "Qelm", 0);
+   dataFile.add(mM, "mM", 0);
    dataFile.add(Qexc, "Qexc", 0);
+   dataFile.add(Uexc, "Uexc", 0);
+   dataFile.add(Qmom, "Qmom", 0);
     
    cout << endl;  
 }
@@ -116,6 +127,7 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
 {
    cout << "Loading cross section data ... " << endl;
    ifstream xfile(xsecsFile.c_str());
+   int firstExc = 1;
    if(xfile.is_open()) {
       double mM2, thisE, thisQ;
       double thisU, thisTransition, createInvQ;
@@ -129,7 +141,7 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             getline(xfile,str);
             cout << "Elastic reaction: " << str << endl;
             xfile >> mM2;
-            cout << "m/M = " << mM2 << endl; 
+            //cout << "m/M = " << mM2 << endl; 
             getline(xfile,str); // parse m/M line
             getline(xfile,str); // parse 1. 1. line
             getline(xfile,str); // parse ----- line
@@ -140,6 +152,7 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             }
             xfile.clear();
             xfile.ignore('\n');
+            //cout << Etemp.back() << endl;
             interpXsecs(Egrid.Ece, Qelm, Etemp, Qtemp, 1, 0);
             Etemp.clear();
             Qtemp.clear();
@@ -153,13 +166,13 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             getline(xfile,str);
             cout << "Inelastic reaction: " << str << endl;;
             xfile >> thisU;
-            cout << "energy threshold: " << thisU << endl;
+            //cout << "energy threshold: " << thisU << endl;
             xfile >> thisTransition;
             if(thisTransition==1) {
-               cout << "Transition is allowed" << endl;
+               //cout << "Transition is allowed" << endl;
             }
             if(thisTransition==0) {
-               cout << "Transition is forbidden" << endl;
+               //cout << "Transition is forbidden" << endl;
             }
             if(thisTransition!=0 && thisTransition!=1) {
                cout << "Transition type not specified, must be 0 or 1" << endl;
@@ -167,7 +180,7 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             }
             xfile >> createInvQ;
             if(createInvQ==1) {
-               cout << "Inverse xsec will be created" << endl;
+               //cout << "Inverse xsec will be created" << endl;
             }
             if(createInvQ==0) {
                //cout << "Inverse xsec will not be created" << endl;
@@ -188,9 +201,19 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             //cout << Qtemp.back() << endl;
             xfile.clear();
             xfile.ignore('\n');
-            interpXsecs(Egrid.Ece, Qexc, Etemp, Qtemp, thisTransition, thisU);
+            vector<double> thisQexc(Egrid.nE+1,0.0);
+            interpXsecs(Egrid.Ece, thisQexc, Etemp, Qtemp, thisTransition, thisU);
             Etemp.clear();
             Qtemp.clear();
+            if(firstExc) {
+               Qexc[0] = thisQexc;
+               Uexc[0] = thisU;
+               firstExc = 0;
+            }
+            else {
+               Qexc.push_back(thisQexc);
+               Uexc.push_back(thisU);
+            }
          }
       }
    }
@@ -198,7 +221,8 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
       cout << "ERROR: could not open xsecs file" << endl;
       exit (EXIT_FAILURE);
    }
-
+         //   cout << Qexc.size() << endl;
+         //   cout << Qexc[Qexc.size()-1].size() << endl;
    
 }
 
@@ -212,30 +236,38 @@ void Gas::interpXsecs(const vector<double>& Ece, vector<double>& Q,
    for (auto n=0; n<nmax; n++) {
       thisE = Ece[n];
       if (thisE <= max(Edata.front(),U) && U==0.0) { // elastic
-         Q[n] = Qdata.front()*Ece[n]/(Edata.front()+1e-20);
+         Q[n] = Qdata.front()*thisE/(Edata.front()+1e-20);
+         if (Edata.front()==0 && thisE==0) {
+            Q[n] = Qdata.front();
+         }
       }
       if (thisE <= max(Edata.front(),U) && U!=0.0) { // inelastic
          Q[n] = 0.0;
       }
-      if (thisE > max(Edata.front(),U) && thisE <= Edata.back()) {
+      if (thisE > max(Edata.front(),U) && thisE < Edata.back()) {
          //thism = 0;
          while (Edata[thism] <= thisE) {
            thism = thism+1;
          }
-         //a = (Edata[thism]-thisE)/(Edata[thism]-max(Edata[thism-1],U));
-         //b = 1.0-a;
-         //Q[n] = b*Qdata[thism] + a*Qdata[thism-1];
-         a = log10(Edata[thism]/thisE)/log10(Edata[thism]/(max(Edata[thism-1],U)));
-         b = 1.0-a;
-         Q[n] = b*log10(Qdata[thism]) + a*log10(Qdata[thism-1]);
-         Q[n] = pow(10,Q[n]); // linear interp on log10 scale
+         if (Qdata[thism-1]==0 || Qdata[thism]==0) { // linear interp
+            a = (Edata[thism]-thisE)/(Edata[thism]-max(Edata[thism-1],U));
+            b = 1.0-a;
+            Q[n] = b*Qdata[thism] + a*Qdata[thism-1];
+         }
+         else { // log interp
+            a = log10(Edata[thism]/thisE)/log10(Edata[thism]/(max(Edata[thism-1],U)));
+            b = 1.0-a;
+            Q[n] = b*log10(Qdata[thism]) + a*log10(Qdata[thism-1]);
+            Q[n] = pow(10,Q[n]); // linear interp on log10 scale
+         }
       }
-      if (thisE > Edata.back()) {
+      if (thisE >= Edata.back()) {
+      //cout << "ARE WE HERE" << endl;
          if (allowed) { // Q ~ ln(E)/E
-            Q[n] = Qdata.back()*log(Ece[n]/Edata.back())*Edata.back()/Ece[n];
+            Q[n] = Qdata.back()*log(thisE)/log(Edata.back())*Edata.back()/thisE;
          }
          else {  // Q ~ 1/E^3
-            Q[n] = Qdata.back()*pow(Edata.back()/Ece[n],3);
+            Q[n] = Qdata.back()*pow(Edata.back()/thisE,3);
          }
       }         
    } 
