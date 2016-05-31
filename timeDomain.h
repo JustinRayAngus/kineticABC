@@ -11,6 +11,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include "EEDF.h"
+#include "energyGrid.h"
 #include "json/json.h"
 #include "HDF5dataFile.h"
 
@@ -23,11 +25,13 @@ public:
   double dtOut, tOutSteps;   // Output intervals and number of steps
   double Cm, tmax;           // Courant multiplier and max time
   double dtSim;              // Simulation time-step
+  double dtFrac;             // dtSim = dtmax/dtFrac 
   vector<double> tOutVec;        // vector of output times
   double tOut;           // current output time 
   
   void initialize(const Json::Value&, HDF5dataFile&);
   void updatetOut(double thistOut);
+  void setdtSim(const EEDF&, const energyGrid&); // set time-step for implicit solver
 
 };
 
@@ -40,13 +44,15 @@ void timeDomain::initialize(const Json::Value& root, HDF5dataFile& dataFile)
       Json::Value dtOutVal      = Time.get("dtOut",defValue);
       Json::Value tOutStepsVal  = Time.get("tOutSteps",defValue);
       Json::Value CmVal         = Time.get("Cm",defValue);
-      if(dtOutVal == defValue || CmVal == defValue || tOutStepsVal == defValue) {
+      Json::Value dtFracVal     = Time.get("dtFrac",defValue);
+      if(dtOutVal == defValue || CmVal == defValue || tOutStepsVal == defValue || dtFracVal == defValue) {
          printf("ERROR: default 'Time' variables not declared in input file\n");
          exit (EXIT_FAILURE);
       }
       dtOut = dtOutVal.asDouble();
       tOutSteps = tOutStepsVal.asDouble();
       Cm = CmVal.asDouble();
+      dtFrac = dtFracVal.asDouble();
       tmax = dtOut*tOutSteps;
       if(Cm >= 1 ) {
          printf("WARNING: Courant number is >= 1 !!! \n");
@@ -55,7 +61,8 @@ void timeDomain::initialize(const Json::Value& root, HDF5dataFile& dataFile)
       //
       cout << "tmax = " << dtOut*tOutSteps << endl;
       cout << "tOut intervals = " << dtOut << endl;
-      cout << "Courant multiplier = " << Cm << endl;
+      cout << "Courant multiplier = " << Cm << " (not used) " << endl;
+      cout << "dtFrac = " << dtFrac << endl;
    }
    else {
       cout << "value for key \"Time\" is not object type !" << endl;
@@ -77,6 +84,26 @@ void timeDomain::updatetOut(const double thistOut)
    tOut = thistOut;
 }
 
-
+void timeDomain::setdtSim(const EEDF& eedf, const energyGrid& Egrid)
+{
+   const vector<double> F0 = eedf.F0;
+   const vector<double> S  = eedf.ExcS;
+   const vector<double> Flux = eedf.Flux;
+   const vector<double> Ecc = Egrid.Ecc;
+   
+   // F0^{n+1} = F0^n + dt*(S - divFlux)
+   //
+   const int nE = Egrid.nE;
+   double thisRHS;
+   double dtmax = 1.0e6;
+   for(auto i=0; i<nE; i++) {
+      thisRHS = S[i] - (Flux[i+1]-Flux[i])/(sqrt(Ecc[i])*Egrid.dE);
+      if(thisRHS!=0) {
+         dtmax = min(dtmax, F0[i]/abs(thisRHS));
+      }
+   }
+   dtSim = min(dtOut/dtFrac,dtmax/dtFrac);
+   //cout << "dtSim = " << dtSim << endl;
+}
 
 #endif

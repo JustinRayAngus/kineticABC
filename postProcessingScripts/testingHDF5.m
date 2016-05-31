@@ -26,7 +26,7 @@ D = hdf5read(thisFile,'D'); % D = D(:,2);
 nt = length(F0(1,:));
 close(figure(3)); f3=figure(3); set(f3,'position',[0 100 1000 400]);
 subplot(1,2,1); 
-semilogy(Ecc,F0(:,1)); xlabel('\epsilon [eV]'); ylabel('\epsilon^1^/^2F_0 [1/eV]');
+semilogy(Ecc,F0(:,1)); xlabel('\epsilon [eV]'); ylabel('F_0 [1/eV^3^/^2]');
 title('EEDF evolution');
 hold on; plot(Ecc,F0(:,round(nt/4)),'magenta');
 hold on; plot(Ecc,F0(:,round(nt/2)),'color',[0 0.5 0]);

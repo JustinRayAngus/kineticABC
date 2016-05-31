@@ -76,17 +76,16 @@ int main(int argc, char** argv) {
    //
    eedf.computeFlux(gas, Egrid, EVpm);
    eedf.computeExcS(gas, Egrid);
-
+   tDom.setdtSim(eedf, Egrid); 
 
    // march forward in time
    //
-   const double dtSim = eedf.dtStable*tDom.Cm;
-   cout << "Stable time step: " << eedf.dtStable << endl;
-   cout << "Simulation time step: " << dtSim << endl << endl;        
+   //const double dtSim = eedf.dtStable*tDom.Cm;
+   //cout << "Stable time step: " << eedf.dtStable << endl;
+   double dtSim = tDom.dtSim;
+   cout << "Initial simulation time step: " << dtSim << endl << endl;        
    double thist = 0;
    int thistOutInt = 1;
-   
-   //dataFile.writeAll(); // append extendable outputs
    
    while(thist<tDom.tmax) {
       thist = thist + dtSim;
@@ -97,11 +96,14 @@ int main(int argc, char** argv) {
          eedf.computeFlux(gas, Egrid, EVpm);
          eedf.computeExcS(gas, Egrid);
       }
+      tDom.setdtSim(eedf, Egrid); // probably better to not do this every time step
+      dtSim = tDom.dtSim; // update simulation time step 
       if(thist >= tDom.tOutVec[thistOutInt]) {
          tDom.updatetOut(thist);
          dataFile.writeAll(); // append extendable outputs
          cout << "Output variables dumped at time " << thist << endl;
          thistOutInt = thistOutInt+1;
+         // cout << "Simulation time step = " << dtSim << endl;
       }
    }
 

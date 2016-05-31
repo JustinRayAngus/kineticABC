@@ -169,7 +169,8 @@ void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
    // loop through each reaction
    //
    double thisU, PL, PU, Esub, deltaE;
-   double a, b, deltaQ;
+   double a, b;
+   // deltaQ;
    //double c, d, g, exp1, exp2;
    int thism;
    vector<double> thisQ;
@@ -188,7 +189,7 @@ void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
             a = thisU;
             b = Egrid.Ece[j+1];
             if(a==b) a = Egrid.Ece[j]; // prevent divide by zero below using method 2 and 3
-            deltaQ = thisQ[j+1]-thisQ[j]; // method 2
+ //           deltaQ = thisQ[j+1]-thisQ[j]; // method 2
             PU = Ng*gamma*F0half[j]*(thisQ[j]+thisQ[j+1])/2.0*(b*b-a*a)/2.0; // method 1
  //         PU = Ng*gamma*F0half[j]*(b*b/2.0*(thisQ[j]-deltaQ*a/(b-a))+b*b*b*deltaQ/3.0/(b-a)
  //            -                 a*a/2.0*(thisQ[j]-deltaQ*a/(b-a))-a*a*a*deltaQ/3.0/(b-a));
@@ -210,7 +211,7 @@ void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
          if(Egrid.Ece[j] >= thisU) {
             //cout << "this j = " << j << endl;
             Esub = Egrid.Ece[j]+deltaE;
-            deltaQ = thisQ[j+1]-thisQ[j];
+  //          deltaQ = thisQ[j+1]-thisQ[j];
             
             // calculate source term for cell j
             //
