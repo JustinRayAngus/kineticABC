@@ -205,10 +205,10 @@ void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
             ExcS[j] -= PU; //Egrid.dE;
             ExcS[0] += PU; //Egrid.dE;
             deltaE = thisU - Egrid.Ece[j];
-            //cout << "this n = " << n << endl;
+            //cout << "this J = " << j << endl;
          }
          if(Egrid.Ece[j] >= thisU) {
-
+            //cout << "this j = " << j << endl;
             Esub = Egrid.Ece[j]+deltaE;
             deltaQ = thisQ[j+1]-thisQ[j];
             

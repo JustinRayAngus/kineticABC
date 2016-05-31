@@ -1,12 +1,12 @@
 {
 "Egrid":{
-         "Emax":200, // [eV]
-         "nE":2e3
+         "Emax":100, // [eV]
+         "nE":1e3
         },
 "Time" :{
-         "dtOut":2e-9,     // output time intervals
-         "tOutSteps":20,   // number of output setps
-         "Cm":1           // Courant multiplier
+         "dtOut":5e-9,     // output time intervals
+         "tOutSteps":80,   // number of output setps
+         "Cm":100           // Courant multiplier
        },
 "EEDF" :{
          "Te":4,    // initial electron temp [eV]
@@ -20,7 +20,7 @@
          //"xsecsFile":"../xsecsN2_test2.txt"
        },
 "ElectricField"  :{
-         "E":1e3  // electric field [V/m]
+         "E":2e3  // electric field [V/m]
        }
 }
 

@@ -17,16 +17,14 @@ Te0 = hdf5read(thisFile,'Te0');
 t   = hdf5read(thisFile,'tout');
 Flux = hdf5read(thisFile,'Flux');
 ExcS = hdf5read(thisFile,'ExcS');
-W = hdf5read(thisFile,'W');
-W = W(:,2);
-D = hdf5read(thisFile,'D');
-D = D(:,2);
+W = hdf5read(thisFile,'W'); % W = W(:,2);
+D = hdf5read(thisFile,'D'); % D = D(:,2);
 %display(Ecc);
 %display(Ece);
 %display(Te0);
 
 nt = length(F0(1,:));
-close(figure(4)); f4=figure(4); set(f4,'position',[0 100 1000 400]);
+close(figure(3)); f3=figure(3); set(f3,'position',[0 100 1000 400]);
 subplot(1,2,1); 
 semilogy(Ecc,F0(:,1)); xlabel('\epsilon [eV]'); ylabel('\epsilon^1^/^2F_0 [1/eV]');
 title('EEDF evolution');
@@ -51,9 +49,10 @@ deltaE = Ecc(2)-Ecc(1);
 for i = 1:length(Ecc)
     dFlux(i,:) = (Flux(i+1,:)-Flux(i,:))/(deltaE*sqrt(Ecc(i)));
 end
-close(figure(1));
-figure(1); loglog(Ecc,abs(dFlux(:,nt)),'b',Ecc,abs(ExcS(:,nt)),'r');
-legend('div Flux','Source');
+close(figure(111));
+figure(111); semilogx(Ecc,dFlux(:,nt),'b',Ecc,ExcS(:,nt),'r--');
+legend('div Flux','Source'); 
+xlabel('\epsilon [eV]');
 
 % filePath = '../build/';
 % fileName = 'outputTest.h5';
@@ -66,6 +65,7 @@ Ez = hdf5read(thisFile,'E');      % [V/m]
 mM = hdf5read(thisFile,'mM');
 Ng = hdf5read(thisFile,'Ng');     % [1/m^3]
 Qelm = hdf5read(thisFile,'Qelm'); % [m^2]
+Qmom = hdf5read(thisFile,'Qmom');
 Qexc = hdf5read(thisFile,'Qexc');
 Uexc = hdf5read(thisFile,'Uexc');
 
@@ -79,7 +79,7 @@ FSoln = exp(exponent);
 normC = sum(sqrt(Ece).*FSoln*deltaE);
 FSoln = FSoln/normC;
 
-figure(4);
+figure(3);
 %VE4 = Ez^2/(3*Ng^2*max(Qelm)^2)/mM;
 %VE2 = sqrt(VE4);
 %A = 25.6909/(2*pi*VE2).^1.5; 
@@ -93,7 +93,7 @@ legend('t=0',['t=',num2str(t(round(nt/4)),formatSpec)], ...
        ['t=',num2str(t(nt),formatSpec)],'Elm Soln'); 
    %axis([0 60 0 1.1*max(sqrt(Ece).*FSoln)]);
 
-figure(4);
+figure(3);
 subplot(1,2,2);
 plot(t,zeroMom,'b',t,Te0,'r'); 
 hold on ;plot(t,0*t+TeSoln,'black--');

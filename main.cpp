@@ -69,9 +69,7 @@ int main(int argc, char** argv) {
    //
    electricField ElcField;
    ElcField.initialize(inputRoot, dataFile);
-   //const double EVpm = eedf.Te0*gas.Ng*gas.Qelm[1]*sqrt(3.0*gas.mM); 
    const double EVpm = ElcField.EVpm; 
-   //cout << "E = " << EVpm << " [V/m] " << endl << endl;
      
 
    // compute flux at cell-edges using initial F0
@@ -89,7 +87,7 @@ int main(int argc, char** argv) {
    int thistOutInt = 1;
    
    //dataFile.writeAll(); // append extendable outputs
-   ///*
+   
    while(thist<tDom.tmax) {
       thist = thist + dtSim;
       eedf.F0old = eedf.F0;
@@ -106,7 +104,7 @@ int main(int argc, char** argv) {
          thistOutInt = thistOutInt+1;
       }
    }
-   //*/   
+
    cout << "\nEnding simulation" << endl;
    cout << "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" << endl;
    return 1;
