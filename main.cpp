@@ -65,46 +65,72 @@ int main(int argc, char** argv) {
    eedf.initialize(Egrid, inputRoot, dataFile);   
 
    
-   // determine E[V/m] for const Qelm
+   // set electric field E[V/m]
    //
    electricField ElcField;
    ElcField.initialize(inputRoot, dataFile);
    const double EVpm = ElcField.EVpm; 
      
 
-   // compute flux at cell-edges using initial F0
+   // compute flux at cell-edges using initial F=F0old=F0half
    //
    eedf.computeFlux(gas, Egrid, EVpm);
    eedf.computeExcS(gas, Egrid);
    tDom.setdtSim(eedf, Egrid); 
 
+
    // march forward in time
    //
-   //const double dtSim = eedf.dtStable*tDom.Cm;
-   //cout << "Stable time step: " << eedf.dtStable << endl;
    double dtSim = tDom.dtSim;
-   cout << "Initial simulation time step: " << dtSim << endl << endl;        
+   cout << "Initial simulation time step: " << dtSim << endl << endl;
    double thist = 0;
    int thistOutInt = 1;
-   
+   vector<double> F0m(Egrid.nE,0.0), errorVec(Egrid.nE,0.0);
+   double error;
+
    while(thist<tDom.tmax) {
-      thist = thist + dtSim;
-      eedf.F0old = eedf.F0;
-      eedf.F0half = eedf.F0;
-      for (auto i=0; i<5; i++) { // predict-correct iterations
-         eedf.advanceF0(Egrid, dtSim);
+      thist = thist + dtSim; // new time at end of this time step
+      for (auto i=0; i<100; i++) {     // predict-correct iterations
+         eedf.advanceF0(Egrid, dtSim); // F0 and F0half updated here
+         if (i==0) { 
+            F0m = eedf.F0;
+         }
+         else {
+            for (auto j=0; j<Egrid.nE; j++) {
+               errorVec[j] = abs(1.0-F0m[j]/eedf.F0[j]);
+            }
+            error = *max_element(begin(errorVec), end(errorVec));
+            if (error <= 1e-5) {
+               if (i>=10) {
+                  cout << "iteration = " << i << endl;
+                  cout << "error = " << error << endl;
+               }
+               break;
+            }
+            F0m = eedf.F0;
+         }
          eedf.computeFlux(gas, Egrid, EVpm);
-         eedf.computeExcS(gas, Egrid);
+         eedf.computeExcS(gas, Egrid); // uses F0half
       }
-      tDom.setdtSim(eedf, Egrid); // probably better to not do this every time step
-      dtSim = tDom.dtSim; // update simulation time step 
+
+      // check if thist is an output time
+      //
       if(thist >= tDom.tOutVec[thistOutInt]) {
          tDom.updatetOut(thist);
          dataFile.writeAll(); // append extendable outputs
-         cout << "Output variables dumped at time " << thist << endl;
+         cout << "Output variables dumped at t = " << thist << " s" << endl;
          thistOutInt = thistOutInt+1;
          // cout << "Simulation time step = " << dtSim << endl;
       }
+
+      // reset F0old, F0half, and update simulation time step
+      //
+      eedf.F0old = eedf.F0;
+      eedf.F0half = eedf.F0;
+      eedf.computeFlux(gas, Egrid, EVpm);
+      eedf.computeExcS(gas, Egrid);
+      tDom.setdtSim(eedf, Egrid);
+      dtSim = tDom.dtSim;
    }
 
    cout << "\nEnding simulation" << endl;

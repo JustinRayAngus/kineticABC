@@ -86,7 +86,7 @@ void timeDomain::updatetOut(const double thistOut)
 
 void timeDomain::setdtSim(const EEDF& eedf, const energyGrid& Egrid)
 {
-   const vector<double> F0 = eedf.F0;
+   //const vector<double> F0old = eedf.F0old;
    const vector<double> S  = eedf.ExcS;
    const vector<double> Flux = eedf.Flux;
    const vector<double> Ecc = Egrid.Ecc;
@@ -99,7 +99,7 @@ void timeDomain::setdtSim(const EEDF& eedf, const energyGrid& Egrid)
    for(auto i=0; i<nE; i++) {
       thisRHS = S[i] - (Flux[i+1]-Flux[i])/(sqrt(Ecc[i])*Egrid.dE);
       if(thisRHS!=0) {
-         dtmax = min(dtmax, F0[i]/abs(thisRHS));
+         dtmax = min(dtmax, eedf.F0old[i]/abs(thisRHS));
       }
    }
    dtSim = min(dtOut/dtFrac,dtmax/dtFrac);
