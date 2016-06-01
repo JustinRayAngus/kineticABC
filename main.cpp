@@ -60,23 +60,24 @@ int main(int argc, char** argv) {
    //
    Gas gas;
    gas.initialize(Egrid, inputRoot, dataFile);   
-   //
-   EEDF eedf;
-   eedf.initialize(Egrid, inputRoot, dataFile);   
-
-   
+  
+ 
    // set electric field E[V/m]
    //
    electricField ElcField;
    ElcField.initialize(inputRoot, dataFile);
    const double EVpm = ElcField.EVpm; 
-     
+
+   // initialize eedf
+   //  
+   EEDF eedf;
+   eedf.initialize(gas, Egrid, inputRoot, dataFile);   
 
    // compute flux at cell-edges using initial F=F0old=F0half
    //
    eedf.computeFlux(gas, Egrid, EVpm);
-   eedf.computeExcS(gas, Egrid);
-   tDom.setdtSim(eedf, Egrid); 
+   dataFile.add(eedf.Flux, "Flux", 1);
+   tDom.setdtSim(eedf, Egrid); // set initial time step
 
 
    // march forward in time
@@ -109,6 +110,7 @@ int main(int argc, char** argv) {
             }
             F0m = eedf.F0;
          }
+         eedf.computeIznS(gas, Egrid); // uses F0half
          eedf.computeFlux(gas, Egrid, EVpm);
          eedf.computeExcS(gas, Egrid); // uses F0half
       }
@@ -120,19 +122,21 @@ int main(int argc, char** argv) {
          dataFile.writeAll(); // append extendable outputs
          cout << "Output variables dumped at t = " << thist << " s" << endl;
          thistOutInt = thistOutInt+1;
-         // cout << "Simulation time step = " << dtSim << endl;
+         //cout << "Simulation time step = " << dtSim << endl;
       }
 
       // reset F0old, F0half, and update simulation time step
       //
       eedf.F0old = eedf.F0;
       eedf.F0half = eedf.F0;
+      eedf.computeIznS(gas, Egrid);
       eedf.computeFlux(gas, Egrid, EVpm);
       eedf.computeExcS(gas, Egrid);
       tDom.setdtSim(eedf, Egrid);
       dtSim = tDom.dtSim;
    }
 
+   cout << "\nFinal simulation time step = " << dtSim << endl;
    cout << "\nEnding simulation" << endl;
    cout << "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" << endl;
    return 1;

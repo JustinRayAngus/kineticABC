@@ -23,17 +23,18 @@ using namespace std;
 class EEDF
 {
 public:
-   double zeroMom, Te0;   // zero momentum, Te;
+   double zeroMom, Te0, nunet=0.0;   // zero momentum, Te, dne/dt/ne;
    string type0;          // initial type of EEDF
    vector<double> F0, F0old, F0half; // EEDF
    vector<double> W, D, Flux;  // Energy space adv, diff, and flux at cell-edge
-   vector<double> ExcS; // electronic-excitation source term at cell-center
+   vector<double> ExcS, IznS; // electronic-excitation source term at cell-center
    
    double dtStable;  // stable time-step
    
-   void initialize(const energyGrid&, const Json::Value&, HDF5dataFile&);
+   void initialize(const Gas&, const energyGrid&, const Json::Value&, HDF5dataFile&);
    void computeFlux(const Gas&, const energyGrid&, const double&);
    void computeExcS(const Gas&, const energyGrid&);
+   void computeIznS(const Gas&, const energyGrid&);
    void advanceF0(const energyGrid&, const double&);
    
 private:
@@ -42,11 +43,13 @@ private:
    void IntExp(double&, const double&, const double&, const double&, const int&);
 };
 
-void EEDF::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5dataFile& dataFile)
+void EEDF::initialize(const Gas& gas, const energyGrid& Egrid, const Json::Value& root, 
+                      HDF5dataFile& dataFile)
 {
    F0.assign(Egrid.nE,0.0);
    Flux.assign(Egrid.nE+1,0.0);
    ExcS.assign(Egrid.nE,0.0);
+   IznS.assign(Egrid.nE,0.0);
    W.assign(Egrid.nE+1,0.0);
    D.assign(Egrid.nE+1,0.0);
    const Json::Value defValue; // used for default reference
@@ -86,12 +89,17 @@ void EEDF::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5data
    F0half = F0;
    
    dataFile.add(F0, "F0", 1);  
-   dataFile.add(Flux, "Flux", 1); //Flux = WF - D*dF/dE
+   
+   computeExcS(gas, Egrid);
+   computeIznS(gas, Egrid);
+   dataFile.add(ExcS, "ExcS", 1); // excitation source term
+   dataFile.add(IznS, "IznS", 1); // excitation source term
+   //dataFile.add(Flux, "Flux", 1); //Flux = WF - D*dF/dE (added elsewhere after first comp)
    dataFile.add(W, "W", 1);  // advection coefficient
    dataFile.add(D, "D", 1);  // diffusion coefficient
-   dataFile.add(ExcS, "ExcS", 1); // excitation source term
    dataFile.add(zeroMom, "zeroMom", 1); // should remain at one always !!! 
    dataFile.add(Te0, "Te0", 1); 
+   dataFile.add(nunet, "nunet", 1); // dne/dt/ne (electron production at)
    cout << endl;  
 }
 
@@ -101,7 +109,9 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
    const double mM = gas.mM;
    const double econst = 1.6022e-19;
    const double meconst = 9.1094e-31;
+   const double kBconst = 1.3807e-23;
    const double gamma = sqrt(2.0*econst/meconst);
+   const vector<double> Ece = Egrid.Ece;
    const int nE = Egrid.nE; // number of cell-center points
    
    // compute advection and diffusion coefficients
@@ -113,8 +123,10 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
    dtMaxWD.assign(nE+1,1E20);   // coura^2/alpha < 2
    
    for (auto n=1; n<nE+1; n++) { // dont need values at E=0
-      W[n] = -gamma*Ng*2.0*mM*pow(Egrid.Ece[n],2.0)*gas.Qelm[n];
-      D[n] = gamma*EVpm*EVpm/3.0/Ng/gas.Qmom[n]*Egrid.Ece[n];
+      W[n] = -gamma*Ng*2.0*mM*pow(Egrid.Ece[n],2)*gas.Qelm[n];
+      //D[n] = gamma*EVpm*EVpm/3.0/Ng/gas.Qmom[n]*Egrid.Ece[n]
+      D[n] = gamma*EVpm*EVpm/3.0*pow(Ece[n],1.5)/(sqrt(Ece[n])*gas.Ng*gas.Qmom[n]+nunet/gamma)
+           + gamma*kBconst*Ng*gas.Tg/econst*pow(Egrid.Ece[n],2)*2.0*mM*gas.Qelm[n];
       PecNum[n] = W[n]*Egrid.dE/D[n];
       dtMaxW[n] = Egrid.dE*sqrt(Egrid.Ece[n])/abs(W[n]);
       dtMaxD[n] = 0.5*Egrid.dE*Egrid.dE*sqrt(Egrid.Ece[n])/D[n];
@@ -154,7 +166,6 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
    }
    Flux[nE] = 0; 
 }
-
 
 void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
 {
@@ -263,7 +274,80 @@ void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
 
 }
 
+void EEDF::computeIznS(const Gas& gas, const energyGrid& Egrid)
+{
+   const double Ng = gas.Ng;
+   const vector<vector<double>> Qizn = gas.Qizn;
+   const vector<double> Uizn = gas.Uizn;
+   const double econst = 1.6022e-19;
+   const double meconst = 9.1094e-31;
+   const double gamma = sqrt(2.0*econst/meconst);
+   const int nE = Egrid.nE; // number of cell-center points
+   
+   // loop through each reaction
+   //
+   double thisU, PL, PU, Esub, deltaE;
+   double a, b;
+   int thism;
+   vector<double> thisQ;
+   int numReacs = Uizn.size();
+   fill(IznS.begin(),IznS.end(),0.0); // reset to zeros
+   for (auto n=0; n<numReacs; n++) {
+      thisU = Uizn[n];
+      thisQ = Qizn[n];
+      //cout << thisQ.size() << endl;
+      thism = 1;
+      for (auto j=0; j<nE; j++) {
+         if( Egrid.Ece[j] < thisU && thisU <= Egrid.Ece[j+1] ) {
+         
+            // this cell contains thisU
+            //
+            a = thisU;
+            b = Egrid.Ece[j+1];
+            PU = Ng*gamma*F0half[j]*(thisQ[j]+thisQ[j+1])/2.0*(b*b-a*a)/2.0;
+          
+            // Update RHS dint(f)/dE/dt due to source term
+            //  
+            IznS[j] -= PU;
+            IznS[0] += PU;
+            IznS[0] += PU; // new electrons go to zero energy
+            deltaE = thisU - Egrid.Ece[j];
+            //cout << "this J = " << j << endl;
+         }
+         if(Egrid.Ece[j] >= thisU) {
+            //cout << "this j = " << j << endl;
+            Esub = Egrid.Ece[j]+deltaE;
+            
+            // calculate source term for cell j
+            //
+            a = Egrid.Ece[j];
+            b = Esub;
+            PL = Ng*gamma*F0half[j]*(thisQ[j]+thisQ[j+1])/2.0*(b*b-a*a)/2.0; 
+            a = Esub;
+            b = Egrid.Ece[j+1];
+            PU = Ng*gamma*F0half[j]*(thisQ[j]+thisQ[j+1])/2.0*(b*b-a*a)/2.0;
 
+            // Update RHS dint(f)/dE/dt due to excitation source term
+            //  
+            IznS[j] -= (PL+PU); 
+            IznS[thism-1] += PL; 
+            IznS[thism] += PU;
+            IznS[0] += PL+PU; // new electrons go to zero energy
+            thism = thism+1;
+         } 
+      }
+   }
+   
+   nunet = 0;
+   double zeroMomHalf = 0.0;
+   for (auto j=0; j<nE; j++) {
+      nunet += IznS[j];
+      IznS[j] /= Egrid.dE*sqrt(Egrid.Ecc[j]);
+      zeroMomHalf += F0half[j]*sqrt(Egrid.Ecc[j])*Egrid.dE; // should be unity
+   }
+   nunet /=zeroMomHalf; // for numerical conservation purposes
+
+}
 
 void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
 {
@@ -273,7 +357,7 @@ void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
    //
    for (auto n=0; n<nE; n++) {
       F0[n] = F0[n] - dt*(Flux[n+1]-Flux[n])/Egrid.dE/sqrt(Egrid.Ecc[n])
-                    + dt*ExcS;
+                    + dt*(ExcS+IznS);
    }
    */
    
@@ -288,7 +372,7 @@ void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
    // add inelastic source/sink term to d vector
    //
    for (auto n=0; n<nE; n++) {
-      d[n] += 4.0*dt*ExcS[n];
+      d[n] += 4.0*dt*(ExcS[n]+IznS[n]-nunet*F0half[n]);
    }
    
    // Row reduce
@@ -305,7 +389,7 @@ void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
       F0[n] = (d[n] - F0[n+1]*c[n])/b[n]; 
       if(F0[n]<0) {
          cout << "F0("<< n <<")= " << F0[n] << endl;
-         F0[n] = 1.0e-15;
+         //F0[n] = 1.0e-15;
       }
    }
    

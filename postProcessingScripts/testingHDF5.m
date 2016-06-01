@@ -17,6 +17,7 @@ Te0 = hdf5read(thisFile,'Te0');
 t   = hdf5read(thisFile,'tout');
 Flux = hdf5read(thisFile,'Flux');
 ExcS = hdf5read(thisFile,'ExcS');
+IznS = hdf5read(thisFile,'IznS');
 W = hdf5read(thisFile,'W'); % W = W(:,2);
 D = hdf5read(thisFile,'D'); % D = D(:,2);
 %display(Ecc);
@@ -50,7 +51,7 @@ for i = 1:length(Ecc)
     dFlux(i,:) = (Flux(i+1,:)-Flux(i,:))/(deltaE*sqrt(Ecc(i)));
 end
 close(figure(111));
-figure(111); semilogx(Ecc,dFlux(:,nt),'b',Ecc,ExcS(:,nt),'r--');
+figure(111); semilogx(Ecc,dFlux(:,nt),'b',Ecc,ExcS(:,nt)+IznS(:,nt),'r--');
 legend('div Flux','Source'); 
 xlabel('\epsilon [eV]');
 

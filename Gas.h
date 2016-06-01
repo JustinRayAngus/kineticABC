@@ -27,10 +27,10 @@ public:
    double mM;           // electron mass / gas species mass
    vector<vector<double>> Qexc; // electronic-excitation cross section [m^2]
    vector<double> Uexc;         // transition thresholds [eV]
-   vector<double> Qvib; // vibrational-excitation cross section [m^2]
-   double Uvib;
-   vector<double> Qizn; // ionization cross section [m^2]
-   double Uizn;
+   //vector<double> Qvib; // vibrational-excitation cross section [m^2]
+   //double Uvib;
+   vector<vector<double>> Qizn; // ionization cross section [m^2]
+   vector<double> Uizn;
    vector<double> Qmom; // momentum transfer cross section
                
                         
@@ -48,9 +48,10 @@ private:
 void Gas::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5dataFile& dataFile)
 {
    Qelm.assign(Egrid.nE+1,0.0);
-   //Qexc.assign(Egrid.nE+1,0.0);
    Qexc.resize(1,vector<double>(Egrid.nE+1,0.0));
    Uexc.assign(1,0.0);
+   Qizn.resize(1,vector<double>(Egrid.nE+1,0.0));
+   Uizn.assign(1,0.0);
    Qmom.assign(Egrid.nE+1,0.0);
    const Json::Value defValue; // used for default reference
    const Json::Value Gas = root.get("Gas",defValue);
@@ -89,6 +90,8 @@ void Gas::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5dataF
          cout << "xsecs file = " << xsecsFile << endl;
          loadXsecs(Egrid, xsecsFile);
          
+         // add all xsecs together to get Qmom
+         //
          const int nQ = Qmom.size();
          const int nExc = Qexc.size();
          vector<double> thisQexc;
@@ -99,6 +102,14 @@ void Gas::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5dataF
                Qmom[n] += thisQexc[n];
             }
          }
+         const int nIzn = Qizn.size();
+         vector<double> thisQizn;
+         for (auto m=0; m<nIzn; m++) {
+            thisQizn = Qizn[m];
+            for (auto n=0; n<nQ; n++) {
+               Qmom[n] += thisQizn[n];
+            }
+         }     
          
       }
       else {
@@ -118,6 +129,8 @@ void Gas::initialize(const energyGrid& Egrid, const Json::Value& root, HDF5dataF
    dataFile.add(mM, "mM", 0);
    dataFile.add(Qexc, "Qexc", 0);
    dataFile.add(Uexc, "Uexc", 0);
+   dataFile.add(Qizn, "Qizn", 0);
+   dataFile.add(Uizn, "Uizn", 0);
    dataFile.add(Qmom, "Qmom", 0);
     
    cout << endl;  
@@ -128,13 +141,17 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
    cout << "Loading cross section data ... " << endl;
    ifstream xfile(xsecsFile.c_str());
    int firstExc = 1;
+   int firstIzn = 1;
    if(xfile.is_open()) {
       double mM2, thisE, thisQ;
       double thisU, thisTransition, createInvQ;
       vector<double> Etemp(1,0.0), Qtemp(1,0.0);
       string str;
-      size_t pos, posExc;
+      size_t pos, posExc, posIzn;
       while (getline(xfile,str)) {
+      
+         // look for elastic reactions
+         //
          pos = str.find("ELASTIC");
          if(pos!=string::npos) {
            // cout << str << endl;
@@ -158,13 +175,14 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             Qtemp.clear();
             //Qmom = Qelm;
          }
-         //xfile.ignore(numeric_limits<streamsize>::max(), '\n');
-         //cout << str << endl;
-         posExc = str.find("ELECTRONIC");
+         
+         // look for Excitation reactions
+         //
+         posExc = str.find("EXCITATION");
          if(posExc!=string::npos) {
             //cout << str << endl;
             getline(xfile,str);
-            cout << "Inelastic reaction: " << str << endl;;
+            cout << "Excitation reaction: " << str << endl;;
             xfile >> thisU;
             //cout << "energy threshold: " << thisU << endl;
             xfile >> thisTransition;
@@ -215,6 +233,44 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
                Uexc.push_back(thisU);
             }
          }
+         
+         // look for Ionization reactions
+         //
+         posIzn = str.find("IONIZATION");
+         if(posIzn!=string::npos) {
+            //cout << str << endl;
+            getline(xfile,str);
+            cout << "Ionization reaction: " << str << endl;;
+            xfile >> thisU;
+            //cout << "energy threshold: " << thisU << endl;
+            getline(xfile,str);
+            getline(xfile,str);
+            getline(xfile,str);
+            //cout << str << endl;
+            while (xfile >> thisE && xfile >> thisQ) {
+               Etemp.push_back(thisE);
+               Qtemp.push_back(thisQ);
+            }
+            //cout << Qtemp.front() << endl;
+            //cout << Qtemp.back() << endl;
+            xfile.clear();
+            xfile.ignore('\n');
+            vector<double> thisQizn(Egrid.nE+1,0.0);
+            interpXsecs(Egrid.Ece, thisQizn, Etemp, Qtemp, 1, thisU);
+            Etemp.clear();
+            Qtemp.clear();
+            if(firstIzn) {
+               Qizn[0] = thisQizn;
+               Uizn[0] = thisU;
+               firstIzn = 0;
+            }
+            else {
+               Qizn.push_back(thisQizn);
+               Uizn.push_back(thisU);
+            }
+         }
+         
+         
       }
    }
    else {
