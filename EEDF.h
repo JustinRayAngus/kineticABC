@@ -6,30 +6,23 @@
 
 #ifndef EEDF_h
 #define EEDF_h
+//#ifndef __EEDF_H_INCLUDED__
+//#define __EEDF_H_INCLUDED__
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <math.h>
 
 #include "Gas.h"
-#include "json/json.h"
-#include "energyGrid.h"
-#include "HDF5dataFile.h"
+//#include "energyGrid.h"
 
 using namespace std;
 
 class EEDF
 {
 public:
-   double zeroMom, Te0, nunet=0.0;   // zero momentum, Te, dne/dt/ne;
+   double zeroMom, Te, nunet=0.0;   // zero momentum, Te, dne/dt/ne;
    string type0;          // initial type of EEDF
    vector<double> F0, F0old, F0half; // EEDF
    vector<double> W, D, Flux;  // Energy space adv, diff, and flux at cell-edge
    vector<double> ExcS, IznS; // electronic-excitation source term at cell-center
-   
-   double dtStable;  // stable time-step
    
    void initialize(const Gas&, const energyGrid&, const Json::Value&, HDF5dataFile&);
    void computeFlux(const Gas&, const energyGrid&, const double&);
@@ -56,25 +49,30 @@ void EEDF::initialize(const Gas& gas, const energyGrid& Egrid, const Json::Value
    const Json::Value EEDF = root.get("EEDF",defValue);
    if(EEDF.isObject()) {
       printf("Initializing EEDF ...\n");
-      Json::Value Te = EEDF.get("Te",defValue);
+      Json::Value TeVal = EEDF.get("Te",defValue);
       Json::Value type = EEDF.get("type",defValue);
-      if(Te == defValue || type == defValue) {
+      if(TeVal == defValue || type == defValue) {
          printf("ERROR: Te or type not declared in input file\n");
          exit (EXIT_FAILURE);
       } 
-      Te0 = Te.asDouble();
-      if(Te0 < 0.0) {
+      Te = TeVal.asDouble();
+      if(Te < 0.0) {
          printf("ERROR: Te is not a positive value in input file\n");
          exit (EXIT_FAILURE);
       }
       type0 = type.asString();
       if(type0=="maxwellian" || type0=="Maxwellian") {
-         cout << "Initial EEDF is Maxwellian with Te = " << Te0 << endl;
+         cout << "Initial EEDF is Maxwellian with Te = " << Te << endl;
          zeroMom = 0;
          for (auto n=0; n<Egrid.nE; n++) {
-            F0[n] = 2.0/sqrt(Te0*3.14159)/Te0*exp(-Egrid.Ecc[n]/Te0);
+            F0[n] = 2.0/sqrt(Te*3.14159)/Te*exp(-Egrid.Ecc[n]/Te);
             zeroMom = zeroMom + sqrt(Egrid.Ecc[n])*F0[n]*Egrid.dE;
          }
+         transform(F0.begin(), F0.end(), F0.begin(), bind1st(multiplies<double>(),1.0/zeroMom)); 
+         //for (auto n=0; n<Egrid.nE; n++) {
+         //   F0[n] /= zeroMom;
+         //}
+         zeroMom = 1.0;
       }
       else {
          cout << "Initial EEDF type = " << type0 << " is not valid " << endl;
@@ -98,7 +96,7 @@ void EEDF::initialize(const Gas& gas, const energyGrid& Egrid, const Json::Value
    dataFile.add(W, "W", 1);  // advection coefficient
    dataFile.add(D, "D", 1);  // diffusion coefficient
    dataFile.add(zeroMom, "zeroMom", 1); // should remain at one always !!! 
-   dataFile.add(Te0, "Te0", 1); 
+   dataFile.add(Te, "Te", 1); 
    dataFile.add(nunet, "nunet", 1); // dne/dt/ne (electron production at)
    cout << endl;  
 }
@@ -116,11 +114,8 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
    
    // compute advection and diffusion coefficients
    //
-   vector<double> PecNum, dtMaxW, dtMaxD, dtMaxWD;
+   vector<double> PecNum; 
    PecNum.assign(nE+1,0.0);     // Peclet number, |W*dE/D| < 2, 
-   dtMaxW.assign(nE+1,1E20);    // Courant: coura=|W|*dt/(dE*sqrt(E)) < 1
-   dtMaxD.assign(nE+1,1E20);    // Diff:    alpha=|U|*dt/(dE^2*sqrt(E)) < 1/2
-   dtMaxWD.assign(nE+1,1E20);   // coura^2/alpha < 2
    
    for (auto n=1; n<nE+1; n++) { // dont need values at E=0
       W[n] = -gamma*Ng*2.0*mM*pow(Egrid.Ece[n],2)*gas.Qelm[n];
@@ -128,9 +123,6 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
       D[n] = gamma*EVpm*EVpm/3.0*pow(Ece[n],1.5)/(sqrt(Ece[n])*gas.Ng*gas.Qmom[n]+nunet/gamma)
            + gamma*kBconst*Ng*gas.Tg/econst*pow(Egrid.Ece[n],2)*2.0*mM*gas.Qelm[n];
       PecNum[n] = W[n]*Egrid.dE/D[n];
-      dtMaxW[n] = Egrid.dE*sqrt(Egrid.Ece[n])/abs(W[n]);
-      dtMaxD[n] = 0.5*Egrid.dE*Egrid.dE*sqrt(Egrid.Ece[n])/D[n];
-      dtMaxWD[n] = 2.0*D[n]/W[n]/W[n];
    }
    
    // make sure grid is refined enough for results to be physical
@@ -143,16 +135,6 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
       exit(EXIT_FAILURE);
    }
    
-   // compute stable time step for explicit integration
-   //
-   double dtW = *min_element(begin(dtMaxW), end(dtMaxW));
-   double dtD = *min_element(begin(dtMaxD), end(dtMaxD));
-   double dtWD = *min_element(begin(dtMaxWD), end(dtMaxWD));
-   //cout << "Stable time step for advection: " << dtW << endl;
-   //cout << "Stable time step for diffusion: " << dtD << endl;
-   //cout << "Stable time step for advection-diffusion: " << dtWD << endl;
-   dtStable = min(min(dtW,dtD),dtWD);
-      
    // compute Flux = W*F0 - D*dF0/dE
    // boundary conditions are Flux=0 at E=0 and E=Emax
    // E=0 BC is physical and E=Emax BC is to conserve zero moment
@@ -395,11 +377,11 @@ void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
    
    // update moments and F0half
    //
-   Te0 = 0;
+   Te = 0;
    zeroMom = 0;
    for (auto n=0; n<nE; n++) {
       F0half[n] = (F0[n]+F0old[n])/2.0;
-      Te0 = Te0 + 2.0/3.0*pow(Egrid.Ecc[n],1.5)*F0[n]*Egrid.dE;
+      Te = Te + 2.0/3.0*pow(Egrid.Ecc[n],1.5)*F0[n]*Egrid.dE;
       zeroMom = zeroMom + sqrt(Egrid.Ecc[n])*F0[n]*Egrid.dE;
    }
    

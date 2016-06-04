@@ -7,14 +7,6 @@
 #ifndef electricField_h
 #define electricField_h
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <math.h>
-#include "json/json.h"
-#include "HDF5dataFile.h"
-
 using namespace std;
 
 class electricField

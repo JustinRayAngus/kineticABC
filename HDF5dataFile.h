@@ -7,10 +7,6 @@
 #ifndef HDF5dataFile_h
 #define HDF5dataFile_h
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
 #include "H5Cpp.h"
 
 using namespace std;

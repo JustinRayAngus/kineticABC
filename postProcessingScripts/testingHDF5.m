@@ -13,16 +13,19 @@ Ecc = hdf5read(thisFile,'Ecc');
 Ece = hdf5read(thisFile,'Ece');
 F0 = hdf5read(thisFile,'F0');
 zeroMom = hdf5read(thisFile,'zeroMom');
-Te0 = hdf5read(thisFile,'Te0');
+Te = hdf5read(thisFile,'Te');
 t   = hdf5read(thisFile,'tout');
 Flux = hdf5read(thisFile,'Flux');
 ExcS = hdf5read(thisFile,'ExcS');
 IznS = hdf5read(thisFile,'IznS');
+Qizn = hdf5read(thisFile,'Qizn');
+Uizn = hdf5read(thisFile,'Uizn');
+nunet = hdf5read(thisFile,'nunet');
 W = hdf5read(thisFile,'W'); % W = W(:,2);
 D = hdf5read(thisFile,'D'); % D = D(:,2);
 %display(Ecc);
 %display(Ece);
-%display(Te0);
+%display(Te);
 
 nt = length(F0(1,:));
 close(figure(3)); f3=figure(3); set(f3,'position',[0 100 1000 400]);
@@ -87,18 +90,16 @@ figure(3);
 %FSoln = A*exp(-(Ecc/VE2).^2);
 %sum(sqrt(Ecc).*Fsoln.*(Ecc(2)-Ecc(1)))
 TeSoln = 2/3*sum(sqrt(Ece.^3).*FSoln.*deltaE);
-%figure(3); hold on; plot(Ece,sqrt(Ece).*FSoln,'black--');
 formatSpec = '%10.2e\n';
 legend('t=0',['t=',num2str(t(round(nt/4)),formatSpec)], ...
        ['t=',num2str(t(round(nt/2)),formatSpec)], ...
-       ['t=',num2str(t(nt),formatSpec)],'Elm Soln'); 
+       ['t=',num2str(t(nt),formatSpec)]); 
    %axis([0 60 0 1.1*max(sqrt(Ece).*FSoln)]);
 
 figure(3);
 subplot(1,2,2);
-plot(t,zeroMom,'b',t,Te0,'r'); 
-hold on ;plot(t,0*t+TeSoln,'black--');
+plot(t,zeroMom,'b',t,Te,'r'); 
 xlabel('t [s]'); ylabel('Moments');
-axis([0 max(t) 0 1.1*max(Te0)]);
-legend('zero', 'Te', 'Elm only Soln');
+axis([0 max(t) 0 1.1*max(Te)]);
+legend('zero', 'Te');
 title('Evolution of moments');

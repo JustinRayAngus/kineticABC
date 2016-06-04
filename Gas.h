@@ -6,15 +6,10 @@
 
 #ifndef Gas_h
 #define Gas_h
+//#ifndef __Gas_H_INCLUDED__
+//#define __Gas_H_INCLUDED__
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <math.h>
-#include "json/json.h"
-#include "energyGrid.h"
-#include "HDF5dataFile.h"
+//#include "energyGrid.h"
 
 using namespace std;
 

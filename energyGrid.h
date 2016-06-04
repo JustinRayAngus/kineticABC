@@ -7,12 +7,6 @@
 #ifndef energyGrid_h
 #define energyGrid_h
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include "json/json.h"
-#include "HDF5dataFile.h"
 
 using namespace std;
 

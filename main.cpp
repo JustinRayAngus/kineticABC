@@ -3,15 +3,16 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <math.h>
 #include <typeinfo>
+
 #include "json/json.h"
 #include "H5Cpp.h"
-
+#include "HDF5dataFile.h"
 #include "energyGrid.h"
 #include "timeDomain.h"
 #include "Gas.h"
 #include "electricField.h"
-#include "HDF5dataFile.h"
 #include "EEDF.h"
 
 using namespace std;
@@ -29,7 +30,7 @@ int main(int argc, char** argv) {
 
    // Parse the specified json input file
    //
-   const string inputFile = "../input.json";
+   const string inputFile = "./input.json";
    Json::Value inputRoot; // will contain root value after parsing
    Json::Reader reader; 
    ifstream ifile(inputFile);
@@ -77,6 +78,7 @@ int main(int argc, char** argv) {
    //
    eedf.computeFlux(gas, Egrid, EVpm);
    dataFile.add(eedf.Flux, "Flux", 1);
+   cout << endl;
    tDom.setdtSim(eedf, Egrid); // set initial time step
 
 
