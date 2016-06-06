@@ -1,0 +1,5 @@
+There seems to be only so-so agreement with COMSOL steady state.
+This could be due to how COMSOL extrapolates (if it does) xsecs
+to high energy. I should create xsec file with all xsecs out
+to high energy to check this.
+

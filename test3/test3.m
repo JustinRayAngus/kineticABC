@@ -5,8 +5,8 @@
 %%%
 %clear all;
 
-%filePath = './';
-filePath = '../build/';
+filePath = './';
+%filePath = '../build/';
 fileName = 'output.h5';
 thisFile = [filePath,fileName];
 fileinfo = hdf5info(thisFile);
@@ -33,8 +33,8 @@ close(figure(3)); f3=figure(3); set(f3,'position',[0 100 1000 400]);
 subplot(1,2,1); 
 semilogy(Ecc,F0(:,1)); xlabel('\epsilon [eV]'); ylabel('F_0 [1/eV^3^/^2]');
 title('EEDF evolution');
-hold on; plot(Ecc,F0(:,round(nt/4)),'magenta');
-hold on; plot(Ecc,F0(:,round(nt/2)),'color',[0 0.5 0]);
+hold on; plot(Ecc,F0(:,round(nt/8)),'magenta');
+hold on; plot(Ecc,F0(:,round(nt/4)),'color',[0 0.5 0]);
 hold on; plot(Ecc,F0(:,nt),'r');
 
 mom0 = sum(sqrt(Ecc).*F0(:,1))*(Ecc(2)-Ecc(1)); % should be one
@@ -55,7 +55,7 @@ for i = 1:length(Ecc)
     dFlux(i,:) = (Flux(i+1,:)-Flux(i,:))/(deltaE*sqrt(Ecc(i)));
 end
 close(figure(111));
-figure(111); semilogx(Ecc,dFlux(:,nt),'b',Ecc,ExcS(:,nt)+IznS(:,nt),'r--');
+figure(111); semilogx(Ecc,dFlux(:,nt),'b',Ecc,ExcS(:,nt)+IznS(:,nt)-nunet(nt)*F0(:,nt),'r--');
 legend('div Flux','Source'); 
 xlabel('\epsilon [eV]');
 
@@ -92,10 +92,10 @@ figure(3);
 %sum(sqrt(Ecc).*Fsoln.*(Ecc(2)-Ecc(1)))
 TeSoln = 2/3*sum(sqrt(Ece.^3).*FSoln.*deltaE);
 formatSpec = '%10.2e\n';
-legend('t=0',['t=',num2str(t(round(nt/4)),formatSpec)], ...
-       ['t=',num2str(t(round(nt/2)),formatSpec)], ...
+legend('t=0',['t=',num2str(t(round(nt/8)),formatSpec)], ...
+       ['t=',num2str(t(round(nt/4)),formatSpec)], ...
        ['t=',num2str(t(nt),formatSpec)]); 
-%axis([0 80 1e-10 1]);
+axis([0 240 1e-12 0.1]);
 
 figure(3);
 subplot(1,2,2);

@@ -104,6 +104,7 @@ int main(int argc, char** argv) {
             }
             error = *max_element(begin(errorVec), end(errorVec));
             if (error <= 1e-5) {
+            //if (i==6) {
                if (i>=10) {
                   cout << "iteration = " << i << endl;
                   cout << "error = " << error << endl;
@@ -113,8 +114,8 @@ int main(int argc, char** argv) {
             F0m = eedf.F0;
          }
          eedf.computeIznS(gas, Egrid); // uses F0half
-         eedf.computeFlux(gas, Egrid, EVpm);
          eedf.computeExcS(gas, Egrid); // uses F0half
+         eedf.computeFlux(gas, Egrid, EVpm);
       }
 
       // check if thist is an output time
@@ -130,10 +131,11 @@ int main(int argc, char** argv) {
       // reset F0old, F0half, and update simulation time step
       //
       eedf.F0old = eedf.F0;
+      eedf.nunetold = eedf.nunet;
       eedf.F0half = eedf.F0;
       eedf.computeIznS(gas, Egrid);
+      eedf.computeExcS(gas, Egrid); // uses F0half
       eedf.computeFlux(gas, Egrid, EVpm);
-      eedf.computeExcS(gas, Egrid);
       tDom.setdtSim(eedf, Egrid);
       dtSim = tDom.dtSim;
    }

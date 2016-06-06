@@ -18,8 +18,8 @@ using namespace std;
 class EEDF
 {
 public:
-   double zeroMom, Te, nunet=0.0;   // zero momentum, Te, dne/dt/ne;
-   string type0;          // initial type of EEDF
+   double zeroMom, Te, nunet=0.0, nunetold=0.0;   // zero momentum, Te, dne/dt/ne;
+   string type0;         // initial type of EEDF
    vector<double> F0, F0old, F0half; // EEDF
    vector<double> W, D, Flux;  // Energy space adv, diff, and flux at cell-edge
    vector<double> ExcS, IznS; // electronic-excitation source term at cell-center
@@ -120,7 +120,7 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
    for (auto n=1; n<nE+1; n++) { // dont need values at E=0
       W[n] = -gamma*Ng*2.0*mM*pow(Egrid.Ece[n],2)*gas.Qelm[n];
       //D[n] = gamma*EVpm*EVpm/3.0/Ng/gas.Qmom[n]*Egrid.Ece[n]
-      D[n] = gamma*EVpm*EVpm/3.0*pow(Ece[n],1.5)/(sqrt(Ece[n])*gas.Ng*gas.Qmom[n]+nunet/gamma)
+      D[n] = gamma*EVpm*EVpm/3.0*pow(Ece[n],1.5)/(sqrt(Ece[n])*gas.Ng*gas.Qmom[n]+nunetold/gamma)
            + gamma*kBconst*Ng*gas.Tg/econst*pow(Egrid.Ece[n],2)*2.0*mM*gas.Qelm[n];
       PecNum[n] = W[n]*Egrid.dE/D[n];
    }
@@ -192,7 +192,7 @@ void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
 //            d = deltaQ/(b-a); 
 //            IntExp(exp1,a,b,g,1);
 //            IntExp(exp2,a,b,g,2);          
-//            PU = Ng*gamma*F0[j]*exp(Egrid.Ecc[j]*g)*(c*exp1+d*exp2); // method 3
+//            PU = Ng*gamma*F0half[j]*exp(Egrid.Ecc[j]*g)*(c*exp1+d*exp2); // method 3
           
             // Update RHS dint(f)/dE/dt due to source term
             //  
@@ -229,7 +229,7 @@ void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
 //             d = deltaQ/Egrid.dE; 
 //             IntExp(exp1,a,b,g,1);
 //             IntExp(exp2,a,b,g,2);          
-//             PL = Ng*gamma*F0[j]*exp(Egrid.Ecc[j]*g)*(c*exp1+d*exp2);
+//             PL = Ng*gamma*F0half[j]*exp(Egrid.Ecc[j]*g)*(c*exp1+d*exp2);
 //             
 //             a = Esub;
 //             b = Egrid.Ece[j+1];
@@ -237,7 +237,7 @@ void EEDF::computeExcS(const Gas& gas, const energyGrid& Egrid)
 //             d = deltaQ/Egrid.dE; 
 //             IntExp(exp1,a,b,g,1);
 //             IntExp(exp2,a,b,g,2); 
-//             PU = Ng*gamma*F0[j]*exp(Egrid.Ecc[j]*g)*(c*exp1+d*exp2);
+//             PU = Ng*gamma*F0half[j]*exp(Egrid.Ecc[j]*g)*(c*exp1+d*exp2);
             //
             // end method 3
 
@@ -270,6 +270,9 @@ void EEDF::computeIznS(const Gas& gas, const energyGrid& Egrid)
    //
    double thisU, PL, PU, Esub, deltaE;
    double a, b;
+   const string sharing = "equal";
+   //const string sharing = "zero";
+   bool SharedCell = true; // used for equal energy sharing
    int thism;
    vector<double> thisQ;
    int numReacs = Uizn.size();
@@ -288,19 +291,28 @@ void EEDF::computeIznS(const Gas& gas, const energyGrid& Egrid)
             b = Egrid.Ece[j+1];
             PU = Ng*gamma*F0half[j]*(thisQ[j]+thisQ[j+1])/2.0*(b*b-a*a)/2.0;
           
-            // Update RHS dint(f)/dE/dt due to source term
+            // Update ionization sink/source term
             //  
             IznS[j] -= PU;
             IznS[0] += PU;
             IznS[0] += PU; // new electrons go to zero energy
-            deltaE = thisU - Egrid.Ece[j];
+            if(sharing=="zero") {
+               deltaE = thisU - Egrid.Ece[j];
+            }
+            if(sharing=="equal") {
+               deltaE = thisU - Egrid.Ece[j];
+            }
+            if(sharing!="zero" && sharing!="equal") {
+               cout << "ionization sharing method must be zero or equal" << endl;
+               exit(EXIT_FAILURE);
+            }
             //cout << "this J = " << j << endl;
          }
          if(Egrid.Ece[j] >= thisU) {
             //cout << "this j = " << j << endl;
             Esub = Egrid.Ece[j]+deltaE;
             
-            // calculate source term for cell j
+            // calculate sink/source term for cell j
             //
             a = Egrid.Ece[j];
             b = Esub;
@@ -309,26 +321,40 @@ void EEDF::computeIznS(const Gas& gas, const energyGrid& Egrid)
             b = Egrid.Ece[j+1];
             PU = Ng*gamma*F0half[j]*(thisQ[j]+thisQ[j+1])/2.0*(b*b-a*a)/2.0;
 
-            // Update RHS dint(f)/dE/dt due to excitation source term
+            // Update ionization sink/source term
             //  
             IznS[j] -= (PL+PU); 
-            IznS[thism-1] += PL; 
-            IznS[thism] += PU;
-            IznS[0] += PL+PU; // new electrons go to zero energy
-            thism = thism+1;
+            if(sharing=="zero") {
+               IznS[thism-1] += PL; 
+               IznS[thism] += PU;
+               IznS[0] += PL+PU; // new electrons go to zero energy
+               thism = thism+1;
+            }
+            if(sharing=="equal") {
+               if(SharedCell) {
+                  IznS[thism-1] += 2.0*(PL+PU); 
+                  SharedCell = false;
+               }
+               else{
+                  IznS[thism-1] += 2.0*PL; 
+                  IznS[thism] += 2.0*PU;
+                  thism = thism+1;
+                  SharedCell = true;
+               }
+            }
          } 
       }
    }
    
-   nunet = 0;
+   nunet = 0.0;
    double zeroMomHalf = 0.0;
    for (auto j=0; j<nE; j++) {
       nunet += IznS[j];
       IznS[j] /= Egrid.dE*sqrt(Egrid.Ecc[j]);
+      //nunet += IznS[j]*sqrt(Egrid.Ecc[j])*Egrid.dE;
       zeroMomHalf += F0half[j]*sqrt(Egrid.Ecc[j])*Egrid.dE; // should be unity
    }
    nunet /=zeroMomHalf; // for numerical conservation purposes
-
 }
 
 void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
@@ -337,10 +363,10 @@ void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
    /*
    // Explicit forward advance
    //
-   for (auto n=0; n<nE; n++) {
-      F0[n] = F0[n] - dt*(Flux[n+1]-Flux[n])/Egrid.dE/sqrt(Egrid.Ecc[n])
-                    + dt*(ExcS+IznS);
-   }
+   //for (auto n=0; n<nE; n++) {
+   //   F0[n] = F0[n] - dt*(Flux[n+1]-Flux[n])/Egrid.dE/sqrt(Egrid.Ecc[n])
+   //                 + dt*(ExcS+IznS);
+   //}
    */
    
    // Implicit Crank-Nicolson advance
@@ -384,7 +410,11 @@ void EEDF::advanceF0(const energyGrid& Egrid, const double& dt)
       Te = Te + 2.0/3.0*pow(Egrid.Ecc[n],1.5)*F0[n]*Egrid.dE;
       zeroMom = zeroMom + sqrt(Egrid.Ecc[n])*F0[n]*Egrid.dE;
    }
-   
+   // For numerical conservation purposes divide by numerical zeroMom, which should be close to unity 
+   // Finite volume method should not need this...I need to write out the matrix and look at it
+   //
+   //transform(F0.begin(), F0.end(), F0.begin(), bind1st(multiplies<double>(),1.0/zeroMom)); 
+
 }
 
 void EEDF::IntExp(double& soln, const double& a, const double& b, const double& g, const int& pow)

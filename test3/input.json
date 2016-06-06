@@ -1,11 +1,11 @@
 {
 "Egrid":{
-         "Emax":80, // [eV]
-         "nE":1e3
+         "Emax":700, // [eV]
+         "nE":2e3
         },
 "Time" :{
-         "dtOut":5e-10,     // output time intervals
-         "tOutSteps":10,   // number of output setps
+         "dtOut":2e-10,     // output time intervals
+         "tOutSteps":40,   // number of output setps
          "dtFrac":20       // dtSim = dtmax/dtFrac
        },
 "EEDF" :{
@@ -19,7 +19,7 @@
          "xsecsFile":"./xsecsN2_Itikawa.txt"
        },
 "ElectricField"  :{
-         "E":9.6513e3  // electric field [V/m]
+         "E":3.2171e4  // electric field [V/m]
        }
 }
 
