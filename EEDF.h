@@ -18,7 +18,8 @@ using namespace std;
 class EEDF
 {
 public:
-   double zeroMom, Te, nunet=0.0, nunetold=0.0;   // zero momentum, Te, dne/dt/ne;
+   double zeroMom, Te;   // zero moment, electron temp
+   double nunet=0.0;            // dne/dt/ne at n+1/2;
    string type0;         // initial type of EEDF
    vector<double> F0, F0old, F0half; // EEDF
    vector<double> W, D, Flux;  // Energy space adv, diff, and flux at cell-edge
@@ -120,7 +121,7 @@ void EEDF::computeFlux(const Gas& gas, const energyGrid& Egrid, const double& EV
    for (auto n=1; n<nE+1; n++) { // dont need values at E=0
       W[n] = -gamma*Ng*2.0*mM*pow(Egrid.Ece[n],2)*gas.Qelm[n];
       //D[n] = gamma*EVpm*EVpm/3.0/Ng/gas.Qmom[n]*Egrid.Ece[n]
-      D[n] = gamma*EVpm*EVpm/3.0*pow(Ece[n],1.5)/(sqrt(Ece[n])*gas.Ng*gas.Qmom[n]+nunetold/gamma)
+      D[n] = gamma*EVpm*EVpm/3.0*pow(Ece[n],1.5)/(sqrt(Ece[n])*gas.Ng*gas.Qmom[n]+nunet/gamma)
            + gamma*kBconst*Ng*gas.Tg/econst*pow(Egrid.Ece[n],2)*2.0*mM*gas.Qelm[n];
       PecNum[n] = W[n]*Egrid.dE/D[n];
    }

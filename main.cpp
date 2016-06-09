@@ -131,7 +131,6 @@ int main(int argc, char** argv) {
       // reset F0old, F0half, and update simulation time step
       //
       eedf.F0old = eedf.F0;
-      eedf.nunetold = eedf.nunet;
       eedf.F0half = eedf.F0;
       eedf.computeIznS(gas, Egrid);
       eedf.computeExcS(gas, Egrid); // uses F0half

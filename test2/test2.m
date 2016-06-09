@@ -1,21 +1,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
-%%%   compare results with steady state values from COMSOL
+%%%   compare N2 results with steady state values from COMSOL
+%%%   for E/N = 100 Td 
 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear all;
 
 %%%   load comsol results 
 %
-load('N2comsolResults.mat');
-Te0 = N2comsol.Te;
-E0  = N2comsol.E;
-EN0 = N2comsol.EN;
-F00 = N2comsol.F0;
+load('comsolResultsN2_test2.mat');
+Te0 = comsolResults.Te;
+E0  = comsolResults.E;
+EN0 = comsolResults.EN;
+F00 = comsolResults.F0;
 
 %%%   load my simulation results
 %
-filePath = '../test2/';
+filePath = './';
 fileName = 'output.h5';
 thisFile = [filePath,fileName];
 fileinfo = hdf5info(thisFile);
