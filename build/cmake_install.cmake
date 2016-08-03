@@ -1,4 +1,4 @@
-# Install script for directory: /Users/angus/CPP_testing/firstCode
+# Install script for directory: /Users/angus/CPP_testing/firstCode/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

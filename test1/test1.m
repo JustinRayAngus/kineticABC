@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %clear all;
 
-filePath = '../test1/';
+filePath = './';
 fileName = 'output.h5';
 thisFile = [filePath,fileName];
 fileinfo = hdf5info(thisFile);

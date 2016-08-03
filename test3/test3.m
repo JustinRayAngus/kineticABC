@@ -7,7 +7,7 @@
 clear all;
 
 sharing = 'Equal';  % energy sharing for ionization procesess
-sharing = 'Zero';
+%sharing = 'Zero';
 
 %%%   load comsol results 
 %
@@ -55,7 +55,7 @@ nt = length(F0(1,:));
 
 %%%   plot EEDF
 %
-close(figure(3)); f3=figure(3); set(f3,'position',[0 100 1000 400]);
+close(figure(3)); fg=figure(3); set(fg,'position',[0 100 1000 400]);
 subplot(1,2,1);
 semilogy(Ecc,F0(:,1));
 xlabel('\epsilon [eV]'); ylabel('F_0 [1/eV^3^/^2]');
