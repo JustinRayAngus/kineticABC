@@ -11,33 +11,40 @@
 
 
 #include "Gas.h"
-//#include "energyGrid.h"
+#include "energyGrid.h"
+
 
 using namespace std;
 
 class EEDF
 {
 public:
-   double zeroMom, Te;   // zero moment, electron temp
+   double zeroMom, Te;       // zero moment
    double nunet=0.0;            // dne/dt/ne at n+1/2;
    string type0;         // initial type of EEDF
    vector<double> F0, F0old, F0half; // EEDF
    vector<double> W, D, Flux;  // Energy space adv, diff, and flux at cell-edge
    vector<double> ExcS, IznS; // electronic-excitation source term at cell-center
    
-   void initialize(const Gas&, const energyGrid&, const Json::Value&);
+   void initialize(const energyGrid&, const Json::Value&);
    void computeFlux(const Gas&, const energyGrid&, const double&);
    void computeExcS(const Gas&, const energyGrid&);
    void computeIznS(const Gas&, const energyGrid&);
    void advanceF0(const energyGrid&, const double&);
-   
+
+   //double getErDoneTe() const {return Te;}   
+
 private:
+   //double Te;
    void setTriDiagCoeffs(vector<double>&, vector<double>&, vector<double>&, vector<double>&,
                          const energyGrid&, const double&);
+   void getOpalH(double&, const double&, const double&, 
+                 const double&, const double&, const double&);
    void IntExp(double&, const double&, const double&, const double&, const int&);
 };
 
-void EEDF::initialize(const Gas& gas, const energyGrid& Egrid, const Json::Value& root)
+
+void EEDF::initialize(const energyGrid& Egrid, const Json::Value& root)
 {
    F0.assign(Egrid.nE,0.0);
    Flux.assign(Egrid.nE+1,0.0);
@@ -85,9 +92,9 @@ void EEDF::initialize(const Gas& gas, const energyGrid& Egrid, const Json::Value
    }
    F0old = F0;
    F0half = F0;
-   
-   computeExcS(gas, Egrid);
-   computeIznS(gas, Egrid);
+  
+   //computeExcS(gas, Egrid);
+   //computeIznS(gas, Egrid);
    cout << endl;  
 }
 
@@ -251,25 +258,42 @@ void EEDF::computeIznS(const Gas& gas, const energyGrid& Egrid)
    const double Ng = gas.Ng;
    const vector<vector<double>> Qizn = gas.Qizn;
    const vector<double> Uizn = gas.Uizn;
+   const vector<double> energySharing = gas.Sharing;
    const double econst = 1.6022e-19;
    const double meconst = 9.1094e-31;
    const double gamma = sqrt(2.0*econst/meconst);
    const int nE = Egrid.nE; // number of cell-center points
    
-   // loop through each reaction
+   // loop through each ionization reaction
    //
    double thisU, PL, PU, Esub, deltaE;
-   double a, b;
-   const string sharing = "equal";
-   //const string sharing = "zero";
+   double a, b, thisbi0, thiski;
+   double thisH, thisNuSink, thisNuSrcP, thisNuSrcS;
+   string sharing;
    bool SharedCell = true; // used for equal energy sharing
-   int thism;
-   vector<double> thisQ;
+   int thism, kU, kEU, k2EU;
+   vector<double> thisQ, thisIznSrcP, thisIznSrcS;
    int numReacs = Uizn.size();
    fill(IznS.begin(),IznS.end(),0.0); // reset to zeros
    for (auto n=0; n<numReacs; n++) {
       thisU = Uizn[n];
       thisQ = Qizn[n];
+      if(energySharing[n]==0) sharing = "zero";
+      if(energySharing[n]==1) sharing = "equal";
+      if(energySharing[n]==2) {
+         sharing = "Opal";
+         thisbi0 = gas.bi0[n];
+         thiski  = gas.ki[n];
+         thisIznSrcP.assign(nE,0.0);
+         thisIznSrcS.assign(nE,0.0);
+         thisNuSink = 0.0;  // numerical izn rate from sink term
+         thisNuSrcP = 0.0;  // numerical izn rate from primary source term
+         thisNuSrcS = 0.0;  // numerical izn rate from secondary Source term
+      }
+      if(energySharing[n]>=3) {
+         cout << "ionization energy sharing method must be 0 (zero), 1 (equal), or 2 (Opal)" << endl;
+         exit(EXIT_FAILURE);
+      }
       //cout << thisQ.size() << endl;
       thism = 1;
       for (auto j=0; j<nE; j++) {
@@ -280,23 +304,25 @@ void EEDF::computeIznS(const Gas& gas, const energyGrid& Egrid)
             a = thisU;
             b = Egrid.Ece[j+1];
             PU = Ng*gamma*F0half[j]*(thisQ[j]+thisQ[j+1])/2.0*(b*b-a*a)/2.0;
-          
-            // Update ionization sink/source term
+    
+            // Update ionization sink term
             //  
             IznS[j] -= PU;
-            IznS[0] += PU;
-            IznS[0] += PU; // new electrons go to zero energy
-            if(sharing=="zero") {
+          
+            if(sharing=="equal" || sharing=="zero") {
+               IznS[0] += PU; // primaries go to first energy bin
+               IznS[0] += PU; // secondaries go to first energy bin
                deltaE = thisU - Egrid.Ece[j];
+               //cout << "this J = " << j << endl; 
             }
-            if(sharing=="equal") {
-               deltaE = thisU - Egrid.Ece[j];
+            else { // source term for Opal method added after sink term loop
+               thisNuSink = PU;
+               kU = j;      // index for cell that contains thisU
+               kEU = kU;    // index for cell containing U+Ecc[0]
+               if(thisU+Egrid.Ecc[0]>Egrid.Ece[j+1]) kEU=kU+1;
+               k2EU = kU+1; // index for cell containing E+2Ecc[0]
             }
-            if(sharing!="zero" && sharing!="equal") {
-               cout << "ionization sharing method must be zero or equal" << endl;
-               exit(EXIT_FAILURE);
-            }
-            //cout << "this J = " << j << endl;
+            
          }
          if(Egrid.Ece[j] >= thisU) {
             //cout << "this j = " << j << endl;
@@ -311,9 +337,9 @@ void EEDF::computeIznS(const Gas& gas, const energyGrid& Egrid)
             b = Egrid.Ece[j+1];
             PU = Ng*gamma*F0half[j]*(thisQ[j]+thisQ[j+1])/2.0*(b*b-a*a)/2.0;
 
-            // Update ionization sink/source term
+            // Update ionization sink/source terms for "zero" and "equal"
             //  
-            IznS[j] -= (PL+PU); 
+            IznS[j] -= (PL+PU); // add local sink term
             if(sharing=="zero") {
                IznS[thism-1] += PL; 
                IznS[thism] += PU;
@@ -332,9 +358,83 @@ void EEDF::computeIznS(const Gas& gas, const energyGrid& Egrid)
                   SharedCell = true;
                }
             }
+            if(sharing=="Opal") {
+               thisNuSink +=(PL+PU);
+            }
          } 
       }
+      if(sharing=="Opal") { // now update source term for Opal
+         for (auto j=0; j<nE; j++) {
+           
+            // compute source term for primary at this energy
+            //
+            a = thisU + Egrid.Ecc[j];
+            b = min(thisU + 2.0*Egrid.Ecc[j], Egrid.Ece[kEU+1]);
+            PU = Ng*gamma*F0half[kEU]*(thisQ[kEU]+thisQ[kEU+1])/2.0*(b*b-a*a)/2.0; 
+            getOpalH(thisH, (b+a)/2.0, (b+a)/2.0-Egrid.Ecc[j]-thisU, thisU, thisbi0, thiski);         
+            thisIznSrcP[j] += PU*thisH*Egrid.dE; 
+            thisNuSrcP += PU*thisH*Egrid.dE;          
+            for (auto n=kEU+1; n<k2EU; n++) {
+               a = b;
+               b = Egrid.Ece[n+1];
+               PU = Ng*gamma*F0half[n]*(thisQ[n]+thisQ[n+1])/2.0*(b*b-a*a)/2.0; 
+               getOpalH(thisH, (b+a)/2.0, (b+a)/2.0-Egrid.Ecc[j]-thisU, thisU, thisbi0, thiski);  
+               thisIznSrcP[j] += PU*thisH*Egrid.dE;          
+               thisNuSrcP += PU*thisH*Egrid.dE;
+            
+            }
+            a = b;
+            b = min(thisU + 2.0*Egrid.Ecc[j], Egrid.Ece[nE]);
+            PU = Ng*gamma*F0half[k2EU]*(thisQ[k2EU]+thisQ[k2EU+1])/2.0*(b*b-a*a)/2.0; 
+            getOpalH(thisH, (b+a)/2.0, (b+a)/2.0-Egrid.Ecc[j]-thisU, thisU, thisbi0, thiski);  
+            thisIznSrcP[j] += PU*thisH*Egrid.dE; 
+            thisNuSrcP += PU*thisH*Egrid.dE;
+            
+            // compute source term for secondary at this energy
+            //
+            a = b;
+            b = Egrid.Ece[k2EU+1];
+            PU = Ng*gamma*F0half[k2EU]*(thisQ[k2EU]+thisQ[k2EU+1])/2.0*(b*b-a*a)/2.0; 
+            getOpalH(thisH, (b+a)/2.0, Egrid.Ecc[j], thisU, thisbi0, thiski);  
+            thisIznSrcS[j] += PU*thisH*Egrid.dE; 
+            thisNuSrcS += PU*thisH*Egrid.dE;
+            for (auto n=k2EU+1; n<nE; n++) {
+               a = b;
+               b = Egrid.Ece[n+1];
+               PU = Ng*gamma*F0half[n]*(thisQ[n]+thisQ[n+1])/2.0*(b*b-a*a)/2.0; 
+               getOpalH(thisH, (b+a)/2.0, Egrid.Ecc[j], thisU, thisbi0, thiski);  
+               thisIznSrcS[j] += PU*thisH*Egrid.dE;
+               thisNuSrcS += PU*thisH*Egrid.dE;         
+            }                
+            
+            // update indices for integration limits
+            // 
+            kEU  = kEU+1; // lower index for primary source integral
+            k2EU = min(k2EU+2,Egrid.nE-1); // upper index for primary source integral
+            if(kEU==Egrid.nE) break;
+            
+         }
+          
+         // need to renormalize both sources such that integrals are equal -sink
+         // then add them to the total
+         //
+         for (auto j=0; j<nE; j++) {
+            IznS[j] += thisNuSink/thisNuSrcP*thisIznSrcP[j];
+            IznS[j] += thisNuSink/thisNuSrcS*thisIznSrcS[j];
+         }
+//       transform(thisIznSrcP.begin(), thisIznSrcP.end(), thisIznSrcP.begin(), 
+//                 bind1st(multiplies<double>(),thisNuSink/thisNuSrcP)); 
+//       transform(thisIznSrcS.begin(), thisIznSrcS.end(), thisIznSrcS.begin(), 
+//                 bind1st(multiplies<double>(),thisNuSink/thisNuSrcS)); 
+//       transform(IznS.begin(), IznS.end(), IznS.begin(),
+//                 bind1st(adds<double>(),thisIznSrcP)); 
+//       transform(IznS.begin(), IznS.end(), IznS.begin(),
+//                 bind1st(adds<double>(),thisIznSrcS)); 
+
+      }   
+                    
    }
+   
    
    nunet = 0.0;
    double zeroMomHalf = 0.0;
@@ -422,8 +522,24 @@ void EEDF::IntExp(double& soln, const double& a, const double& b, const double& 
    }
 
 }
-void EEDF::setTriDiagCoeffs(vector<double>& a, vector<double>& b, vector<double>& c, vector<double>& d,
-                            const energyGrid& Egrid, const double& dt)
+
+void EEDF::getOpalH(double& H, const double& PrimaryE, const double& SecondaryE, 
+                    const double& Ui, const double& bi0, const double& ki)
+{ 
+   
+   // H normalized such that int_{U}^{(PrimaryE-U)/2}H(PrimaryE,SecondaryE)dSecondaryE = 1   
+   double bi = bi0;
+   if(PrimaryE>=exp(ki)) bi = bi0*ki/log(PrimaryE);
+   if(PrimaryE<=Ui) {
+      cout << " PrimaryE <= Ui in call to Opal H !!! " << endl;
+      exit(EXIT_FAILURE);
+   }   
+   H = bi/atan((PrimaryE-Ui)/(2.0*bi))/(bi*bi + SecondaryE*SecondaryE);
+
+}
+
+void EEDF::setTriDiagCoeffs(vector<double>& a, vector<double>& b, vector<double>& c, 
+                            vector<double>& d, const energyGrid& Egrid, const double& dt)
 {  
    // create vectors of Courant and alphas
    //

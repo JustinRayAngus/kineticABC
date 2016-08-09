@@ -9,7 +9,8 @@
 //#ifndef __Gas_H_INCLUDED__
 //#define __Gas_H_INCLUDED__
 
-//#include "energyGrid.h"
+#include "energyGrid.h"
+
 
 using namespace std;
 
@@ -25,7 +26,7 @@ public:
    //vector<double> Qvib; // vibrational-excitation cross section [m^2]
    //double Uvib;
    vector<vector<double>> Qizn; // ionization cross section [m^2]
-   vector<double> Uizn;
+   vector<double> Uizn, Sharing, bi0, ki;
    vector<double> Qmom; // momentum transfer cross section
                
                         
@@ -47,6 +48,9 @@ void Gas::initialize(const energyGrid& Egrid, const Json::Value& root)
    Uexc.assign(1,0.0);
    Qizn.resize(1,vector<double>(Egrid.nE+1,0.0));
    Uizn.assign(1,0.0);
+   Sharing.assign(1,0.0);
+   bi0.assign(1,0.0);
+   ki.assign(1,0.0);
    Qmom.assign(Egrid.nE+1,0.0);
    const Json::Value defValue; // used for default reference
    const Json::Value Gas = root.get("Gas",defValue);
@@ -129,6 +133,7 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
    if(xfile.is_open()) {
       double mM2, thisE, thisQ;
       double thisU, thisTransition, createInvQ;
+      double thisSharing, thisbi0, thiski;
       vector<double> Etemp(1,0.0), Qtemp(1,0.0);
       string str;
       size_t pos, posExc, posIzn;
@@ -227,6 +232,18 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             cout << "Ionization reaction: " << str << endl;;
             xfile >> thisU;
             //cout << "energy threshold: " << thisU << endl;
+            xfile >> thisSharing;
+            if(thisSharing==0) cout << " zero energy sharing method " << endl;
+            if(thisSharing==1) cout << " equal energy sharing method " << endl;
+            if(thisSharing==2) cout << " Opal energy sharing method " << endl;
+            if(thisSharing!=0 && thisSharing!=1 && thisSharing!=2) {
+               cout << " Sharing method must be 0 (zero), 1 (equal), or 2 (Opal) " << endl;
+               exit (EXIT_FAILURE);
+            }
+            xfile >> thisbi0;
+            cout << "bi0 = " << thisbi0 << endl;
+            xfile >> thiski;
+            cout << "ki = " << thiski << endl;
             getline(xfile,str);
             getline(xfile,str);
             getline(xfile,str);
@@ -246,11 +263,17 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             if(firstIzn) {
                Qizn[0] = thisQizn;
                Uizn[0] = thisU;
+               Sharing[0] = thisSharing;
+               bi0[0] = thisbi0;
+               ki[0] = thiski;
                firstIzn = 0;
             }
             else {
                Qizn.push_back(thisQizn);
                Uizn.push_back(thisU);
+               Sharing.push_back(thisSharing);
+               bi0.push_back(thisbi0);
+               ki.push_back(thiski);
             }
          }
          

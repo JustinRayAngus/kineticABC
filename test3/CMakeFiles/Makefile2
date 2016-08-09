@@ -54,45 +54,45 @@ RM = /opt/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/angus/CPP_testing/firstCode
+CMAKE_SOURCE_DIR = /Users/angus/CPP_testing/firstCode/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/angus/CPP_testing/firstCode/test3
+CMAKE_BINARY_DIR = /Users/angus/CPP_testing/firstCode/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/test.dir
+# Target rules for target CMakeFiles/tdb.dir
 
 # All Build rule for target.
-CMakeFiles/test.dir/all:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/depend
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/angus/CPP_testing/firstCode/test3/CMakeFiles --progress-num=1,2,3 "Built target test"
-.PHONY : CMakeFiles/test.dir/all
+CMakeFiles/tdb.dir/all:
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/depend
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/angus/CPP_testing/firstCode/build/CMakeFiles --progress-num=1,2,3 "Built target tdb"
+.PHONY : CMakeFiles/tdb.dir/all
 
 # Include target in all.
-all: CMakeFiles/test.dir/all
+all: CMakeFiles/tdb.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/angus/CPP_testing/firstCode/test3/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/angus/CPP_testing/firstCode/test3/CMakeFiles 0
-.PHONY : CMakeFiles/test.dir/rule
+CMakeFiles/tdb.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/angus/CPP_testing/firstCode/build/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/tdb.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/angus/CPP_testing/firstCode/build/CMakeFiles 0
+.PHONY : CMakeFiles/tdb.dir/rule
 
 # Convenience name for target.
-test: CMakeFiles/test.dir/rule
+tdb: CMakeFiles/tdb.dir/rule
 
-.PHONY : test
-
-# clean rule for target.
-CMakeFiles/test.dir/clean:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/clean
-.PHONY : CMakeFiles/test.dir/clean
+.PHONY : tdb
 
 # clean rule for target.
-clean: CMakeFiles/test.dir/clean
+CMakeFiles/tdb.dir/clean:
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/clean
+.PHONY : CMakeFiles/tdb.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/tdb.dir/clean
 
 .PHONY : clean
 

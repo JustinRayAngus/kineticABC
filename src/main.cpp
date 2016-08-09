@@ -84,20 +84,22 @@ int main(int argc, char** argv) {
    // initialize eedf
    //  
    EEDF eedf;
-   eedf.initialize(gas, Egrid, inputRoot);   
+   eedf.initialize(Egrid, inputRoot);   
    dataFile.add(eedf.F0, "F0", 1);
-   dataFile.add(eedf.ExcS, "ExcS", 1); // excitation source term
-   dataFile.add(eedf.IznS, "IznS", 1); // ionization source term
-   dataFile.add(eedf.W, "W", 1);       // advection coefficient
-   dataFile.add(eedf.D, "D", 1);       // diffusion coefficient
+   eedf.computeExcS(gas, Egrid);
+   dataFile.add(eedf.ExcS, "ExcS", 1);
+   eedf.computeIznS(gas, Egrid);
+   dataFile.add(eedf.IznS, "IznS", 1);
+   
    dataFile.add(eedf.zeroMom, "zeroMom", 1); // should remain at one always !!! 
    dataFile.add(eedf.Te, "Te", 1);
    dataFile.add(eedf.nunet, "nunet", 1); // dne/dt/ne (electron production rate)
 
-
    // compute flux at cell-edges using initial F=F0old=F0half
    //
    eedf.computeFlux(gas, Egrid, ElcField.EVpm);
+   dataFile.add(eedf.W, "W", 1);       // advection coefficient
+   dataFile.add(eedf.D, "D", 1);       // diffusion coefficient
    dataFile.add(eedf.Flux, "Flux", 1);
    cout << endl;
    tDom.setdtSim(eedf, Egrid); // set initial time step
@@ -124,7 +126,7 @@ int main(int argc, char** argv) {
                errorVec[j] = abs(1.0-F0m[j]/eedf.F0[j]);
             }
             error = *max_element(begin(errorVec), end(errorVec));
-            if (error <= 1e-5) {
+            if (error <= 1e-4) {
             //if (i==6) {
                if (i>=10) {
                   cout << "iteration = " << i << endl;

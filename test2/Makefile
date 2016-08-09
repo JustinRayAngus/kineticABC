@@ -48,10 +48,10 @@ RM = /opt/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/angus/CPP_testing/firstCode
+CMAKE_SOURCE_DIR = /Users/angus/CPP_testing/firstCode/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/angus/CPP_testing/firstCode/test2
+CMAKE_BINARY_DIR = /Users/angus/CPP_testing/firstCode/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/angus/CPP_testing/firstCode/test2/CMakeFiles /Users/angus/CPP_testing/firstCode/test2/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/angus/CPP_testing/firstCode/build/CMakeFiles /Users/angus/CPP_testing/firstCode/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/angus/CPP_testing/firstCode/test2/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/angus/CPP_testing/firstCode/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test
+# Target rules for targets named tdb
 
 # Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test
-.PHONY : test
+tdb: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tdb
+.PHONY : tdb
 
 # fast build rule for target.
-test/fast:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
+tdb/fast:
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/build
+.PHONY : tdb/fast
 
 jsoncpp.o: jsoncpp.cpp.o
 
@@ -129,7 +129,7 @@ jsoncpp.o: jsoncpp.cpp.o
 
 # target to build an object file
 jsoncpp.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/jsoncpp.cpp.o
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/jsoncpp.cpp.o
 .PHONY : jsoncpp.cpp.o
 
 jsoncpp.i: jsoncpp.cpp.i
@@ -138,7 +138,7 @@ jsoncpp.i: jsoncpp.cpp.i
 
 # target to preprocess a source file
 jsoncpp.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/jsoncpp.cpp.i
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/jsoncpp.cpp.i
 .PHONY : jsoncpp.cpp.i
 
 jsoncpp.s: jsoncpp.cpp.s
@@ -147,7 +147,7 @@ jsoncpp.s: jsoncpp.cpp.s
 
 # target to generate assembly for a file
 jsoncpp.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/jsoncpp.cpp.s
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/jsoncpp.cpp.s
 .PHONY : jsoncpp.cpp.s
 
 main.o: main.cpp.o
@@ -156,7 +156,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.o
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -165,7 +165,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -174,7 +174,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles/tdb.dir/build.make CMakeFiles/tdb.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -185,7 +185,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... test"
+	@echo "... tdb"
 	@echo "... jsoncpp.o"
 	@echo "... jsoncpp.i"
 	@echo "... jsoncpp.s"

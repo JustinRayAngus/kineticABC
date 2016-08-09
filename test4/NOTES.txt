@@ -1,0 +1,5 @@
+Same as test3, but using Opal method for energy sharing after ionization event.
+This is considerably slower than using equal or zero energy sharing.
+The sharing method is selected for each ionization even in the xsec file using
+0 (zero) 1 (equal) 2 (Opal). This integer value is placed after the ionization
+potential.
