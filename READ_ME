@@ -1,7 +1,9 @@
 In order to compile executable for test do the following:
 
-First, "source source_me" in order to set home directories to stuff
-Second, "mkdir thisbuild" "cd thisbuild" "cmake .." "make", "./test"
+First  - "source setHDF5HOME" in order to set home directories to stuff
+Second - "mkdir thisbuild" "cd thisbuild" "cmake ../src/" "make"
+Third  - copy over/create input (input.json) and xsection file
+Fourth - run executable: "./tdb"
 
 Note that I had to change some of the include and link directories in 
 CMakeLists.txt since the version is out of date and gmock and gtest 

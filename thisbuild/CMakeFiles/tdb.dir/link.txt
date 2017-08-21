@@ -1,0 +1,1 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++    -Wall -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/tdb.dir/main.cpp.o CMakeFiles/tdb.dir/jsoncpp.cpp.o  -o tdb  -L/Users/angus1/HDF5/hdf5-1.10.0-patch1/hdf5/lib -Wl,-rpath,/Users/angus1/HDF5/hdf5-1.10.0-patch1/hdf5/lib  -lhdf5 -lhdf5_cpp 
