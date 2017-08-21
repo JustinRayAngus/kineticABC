@@ -1,0 +1,26 @@
+{
+"Egrid":{
+         "Emax":40, // [eV]
+         "nE":5e2
+        },
+"Time" :{
+         "dtOut":5e-9,     // output time intervals
+         "tOutSteps":30,   // number of output setps
+         "dtFrac":20.0       // dtSim = dtmax/dtFrac
+       },
+"EEDF" :{
+         "Te":6,    // initial electron temp [eV]
+         "type":"Maxwellian"
+       },
+"Gas"  :{
+         "Tg":300,  // initial gas temp [K]
+         "Pg":10,       // initial gas press [Torr]
+         "name":"Helium",
+         "xsecsFile":"./He4_ExcEff_ABC.txt"
+         //"xsecsFile":"./xsecsN2_Itikawa.txt"
+       },
+"ElectricField"  :{
+         "E":3.2171e3  // electric field [V/m]
+       }
+}
+

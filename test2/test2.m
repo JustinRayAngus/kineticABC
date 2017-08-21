@@ -16,7 +16,8 @@ F00 = comsolResults.F0;
 
 %%%   load my simulation results
 %
-filePath = './';
+%filePath = './';
+filePath = '../build2/';
 fileName = 'output.h5';
 thisFile = [filePath,fileName];
 fileinfo = hdf5info(thisFile);

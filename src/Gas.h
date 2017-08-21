@@ -74,14 +74,22 @@ void Gas::initialize(const energyGrid& Egrid, const Json::Value& root)
       }
       gasName = nameVal.asString();
       xsecsFile = xsecsFileVal.asString();
-      if(gasName=="nitrogen" || gasName=="Nitrogen") {
-      
-         const double atomicM = 14.007; // atomic mass of nitrogen atom
+      if(gasName=="nitrogen" || gasName=="Nitrogen" || 
+         gasName=="helium" || gasName=="Helium" ) {
+         
+         double atomicM;
+         if(gasName=="nitrogen" || gasName=="Nitrogen") {
+             atomicM = 2.0*14.007; // atomic mass of nitrogen molecule
+         }
+         if(gasName=="helium" || gasName=="Helium") {
+             atomicM = 4.0062;     // atomic mass of helium atom
+         }
+
          const double meconst = 9.1094e-28;   // electron mass [g]
          const double amuconst = 1.6605e-24;  // atomic mass unit [g]
-         mM = meconst/(amuconst*atomicM*2.0); // me/MN2
+         mM = meconst/(amuconst*atomicM); // me/M
          
-         cout << "Background gas is nitrogen ... " << endl;
+         cout << "Background gas is " << gasName << " ... " << endl;
          cout << "Tg = " << Tg << " K" << endl;
          cout << "Pg = " << Pg << " Torr" << endl;
          cout << "Ng = " << Ng << " 1/m^3" << endl;
@@ -153,12 +161,21 @@ void Gas::loadXsecs(const energyGrid& Egrid, const string& xsecsFile)
             getline(xfile,str); // parse ----- line
             //int count = 0;
             while (xfile >> thisE && xfile >> thisQ) {
-               Etemp.push_back(thisE);
-               Qtemp.push_back(thisQ);
+               if(thisE==0) {
+                  Qtemp[0] = thisQ;
+               } 
+               else {
+                  Etemp.push_back(thisE);
+                  Qtemp.push_back(thisQ);
+               }
             }
             xfile.clear();
             xfile.ignore('\n');
             //cout << Etemp.back() << endl;
+            //cout << "Qtemp size = " << Qtemp.size() << endl;
+            //cout << "Etemp[0] = " << Etemp[0] << endl;
+            //cout << "Etemp[1] = " << Etemp[1] << endl;
+            //cout << "Etemp[2] = " << Etemp[2] << endl;
             interpXsecs(Egrid.Ece, Qelm, Etemp, Qtemp, 1, 0);
             Etemp.clear();
             Qtemp.clear();

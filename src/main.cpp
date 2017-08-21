@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <math.h>
+#include <cmath>
 #include <typeinfo>
 #include <algorithm>
 
@@ -33,7 +34,8 @@ int main(int argc, char** argv) {
    Json::Value inputRoot; // will contain root value after parsing
    Json::Reader reader; 
    ifstream ifile(inputFile);
-   bool isJsonOK = (ifile !=NULL && reader.parse(ifile, inputRoot));
+   //bool isJsonOK = (ifile != NULL && reader.parse(ifile, inputRoot));
+   bool isJsonOK = (reader.parse(ifile, inputRoot));
    if(isJsonOK) {
       cout << "Input " << inputFile << " parsed successfully" << endl;   
    }
@@ -126,7 +128,7 @@ int main(int argc, char** argv) {
                errorVec[j] = abs(1.0-F0m[j]/eedf.F0[j]);
             }
             error = *max_element(begin(errorVec), end(errorVec));
-            if (error <= 1e-4) {
+            if (error <= 1e-6) {
             //if (i==6) {
                if (i>=10) {
                   cout << "iteration = " << i << endl;

@@ -183,7 +183,7 @@ void HDF5dataFile::writeScl(const double& varData, const char* varName, const bo
       hsize_t dimsf[RANK];
       dimsf[0] = 1; 
       dimsf[1] = 1;
-      hsize_t mdimsf[RANK] = {1, H5S_UNLIMITED};
+      hsize_t mdimsf[2] = {1, H5S_UNLIMITED};
       DataSpace mdataspace(RANK, dimsf, mdimsf); // memory dataspace
       
       DSetCreatPropList cparms;
@@ -193,11 +193,11 @@ void HDF5dataFile::writeScl(const double& varData, const char* varName, const bo
       DataType datatype(varType);
       DataSet dataset = file.createDataSet(varName, datatype, mdataspace, cparms);
       
-      hsize_t size[RANK] = {1, 1};
+      hsize_t size[2] = {1, 1};
       dataset.extend(size);
       DataSpace dataspace = dataset.getSpace();
-      hsize_t offset[RANK] = {0,0};
-      hsize_t dims[RANK] = {1, 1};
+      hsize_t offset[2] = {0,0};
+      hsize_t dims[2] = {1, 1};
       dataspace.selectHyperslab(H5S_SELECT_SET,dims,offset); // data dataspace
                
       dataset.write(&varData, varType, mdataspace, dataspace);
@@ -257,7 +257,7 @@ void HDF5dataFile::writeVec(const vector<double>& varData, const char* varName, 
       hsize_t dimsf[RANK];
       dimsf[0] = Nvar; 
       dimsf[1] = 1;
-      hsize_t mdimsf[RANK] = {H5S_UNLIMITED, varData.size()};
+      hsize_t mdimsf[2] = {H5S_UNLIMITED, varData.size()};
       DataSpace mdataspace(RANK, dimsf, mdimsf); // memory dataspace
       
       DSetCreatPropList cparms;
@@ -267,11 +267,11 @@ void HDF5dataFile::writeVec(const vector<double>& varData, const char* varName, 
       DataType datatype(varType);
       DataSet dataset = file.createDataSet(varName, datatype, mdataspace, cparms);
       
-      hsize_t size[RANK] = {1,varData.size()};
+      hsize_t size[2] = {1,varData.size()};
       dataset.extend(size);
       DataSpace dataspace = dataset.getSpace();
-      hsize_t offset[RANK] = {0,0};
-      hsize_t dims[RANK] = {1,varData.size()};
+      hsize_t offset[2] = {0,0};
+      hsize_t dims[2] = {1,varData.size()};
       dataspace.selectHyperslab(H5S_SELECT_SET,dims,offset); // data dataspace
                
       dataset.write(data, varType, mdataspace, dataspace);

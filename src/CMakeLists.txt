@@ -2,9 +2,11 @@ project("TDBoltzmann")
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
 # include stuff for HDF5
-find_package(HDF5 "1.8.14" REQUIRED COMPONENTS C HL)
-include_directories(${HDF5_INCLUDE_DIRS})
-link_directories(${HDF5_LIBRARY_DIRS})
+#find_package(HDF5 "1.8.14" REQUIRED COMPONENTS C HL)
+#include_directories(${HDF5_INCLUDE_DIRS})
+#link_directories(${HDF5_LIBRARY_DIRS})
+include_directories($ENV{HDF5_HOME}/include)
+link_directories($ENV{HDF5_HOME}/lib)
 
 add_definitions(-std=c++0x)
 set(CMAKE_CXX_FLAGS "${CMAXE_CXX_FLAGS} -Wall")

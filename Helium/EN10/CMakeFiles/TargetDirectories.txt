@@ -1,0 +1,3 @@
+/Users/angus1/Documents/TITTS/kineticABC/build2/CMakeFiles/rebuild_cache.dir
+/Users/angus1/Documents/TITTS/kineticABC/build2/CMakeFiles/edit_cache.dir
+/Users/angus1/Documents/TITTS/kineticABC/build2/CMakeFiles/tdb.dir
