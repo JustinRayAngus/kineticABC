@@ -8,7 +8,7 @@ clear all;
 
 %%%   load my simulation results
 %
-filePath = './EN10/';
+filePath = './EN31/';
 %filePath = '../test2/';
 fileName = 'output.h5';
 thisFile = [filePath,fileName];
@@ -121,3 +121,5 @@ alphaN = alpha/Ng*1e6;           % reduced townsend coefficient [cm^2]
 VT     = 4.19e7*sqrt(Te(nt));    % thermal speed [cm/s]
 display(alphaN);
 display(Vdrift);
+
+

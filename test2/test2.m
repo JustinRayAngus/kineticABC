@@ -16,8 +16,8 @@ F00 = comsolResults.F0;
 
 %%%   load my simulation results
 %
-%filePath = './';
-filePath = '../build2/';
+filePath = './';
+%filePath = '../build2/';
 fileName = 'output.h5';
 thisFile = [filePath,fileName];
 fileinfo = hdf5info(thisFile);
@@ -91,3 +91,39 @@ xlabel('t [ns]'); ylabel('Moments');
 axis([0 max(tns) 0 1.1*max(Te)]);
 legend('zero', 'Te [eV]','Te Soln');
 title('Evolution of moments');
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%%
+%%%   post calculate transport coefficients
+%%%
+%%%
+
+%%%   compute mobility 
+%
+econst = 1.6022e-19;
+meconst = 9.1094e-31;
+gamma = sqrt(2*econst/meconst);
+Qmom = Qelm+sum(Qexc,2)+sum(Qizn,2);
+
+F0ce(2:length(Ece)) = 10.^interp1(log10(Ecc),log10(F0(:,nt)),log10(Ece(2:length(Ece))),'pchirp');
+F0ce(1) = F0(1,nt);
+Qmomcc = 10.^interp1(log10(Ece(2:length(Ece))),log10(Qmom(2:length(Ece))),log10(Ecc),'pchirp');
+dF0dE = zeros(size(Ecc));
+for i = 1:length(Ecc)
+    dF0dE(i) = (F0ce(i+1)-F0ce(i))/deltaE;
+    thisIntegrand(i) = -gamma/3.0*Ecc(i)^1.5*dF0dE(i) ...
+                     /(sqrt(Ecc(i))*Qmomcc(i)+nunet(nt)/(Ng*gamma));
+ %   thisIntegrand(i) = -gamma/3.0*Ecc(i)*dF0dE(i)/Qmomcc(i);
+end
+
+muN = sum(thisIntegrand*deltaE); % reduced mobility [1/s/m/V]
+Vdrift = muN*EN*1e-21*100;       % drift speed [cm/s]
+alpha = nunet(nt)/Vdrift;        % townsend coefficient [1/cm]
+alphaN = alpha/Ng*1e6;           % reduced townsend coefficient [cm^2]
+VT     = 4.19e7*sqrt(Te(nt));    % thermal speed [cm/s]
+display(EN);
+display(alphaN);
+display(Vdrift);
+

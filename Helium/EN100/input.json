@@ -16,7 +16,8 @@
          "Tg":300,  // initial gas temp [K]
          "Pg":10,       // initial gas press [Torr]
          "name":"Helium",
-         "xsecsFile":"./He4_ExcEff_ABC.txt"
+         "xsecsFile":"./HeliumXsecsMacro_forTITTS.txt"
+         //"xsecsFile":"./He4_ExcEff_ABC.txt"
          //"xsecsFile":"./xsecsN2_Itikawa.txt"
        },
 "ElectricField"  :{
