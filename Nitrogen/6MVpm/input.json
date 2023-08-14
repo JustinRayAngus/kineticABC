@@ -1,0 +1,25 @@
+{
+"Egrid":{
+         "Emax":70, // [eV]
+         "nE":2e3
+        },
+"Time" :{
+         "dtOut":2e-13,     // output time intervals
+         "tOutSteps":40,   // number of output setps
+         "dtFrac":4       // dtSim = dtmax/dtFrac
+       },
+"EEDF" :{
+         "Te":4,    // initial electron temp [eV]
+         "type":"Maxwellian"
+       },
+"Gas"  :{
+         "Tg":300,  // initial gas temp [K]
+         "Pg":760,       // initial gas press [Torr]
+         "name":"Nitrogen",
+         "xsecsFile":"./xsecsN2_Itikawa.txt"
+       },
+"ElectricField"  :{
+         "E":6.0e6  // electric field [V/m]
+       }
+}
+
