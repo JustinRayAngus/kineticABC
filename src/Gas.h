@@ -74,55 +74,65 @@ void Gas::initialize(const energyGrid& Egrid, const Json::Value& root)
       }
       gasName = nameVal.asString();
       xsecsFile = xsecsFileVal.asString();
-      if(gasName=="nitrogen" || gasName=="Nitrogen" || 
-         gasName=="helium" || gasName=="Helium" ) {
+      Json::Value atomicMVal = Gas.get("atomicM",defValue);
+      double atomicM;
+      if(atomicMVal == defValue) {
          
-         double atomicM;
          if(gasName=="nitrogen" || gasName=="Nitrogen") {
              atomicM = 2.0*14.007; // atomic mass of nitrogen molecule
          }
          if(gasName=="helium" || gasName=="Helium") {
              atomicM = 4.0062;     // atomic mass of helium atom
          }
-
-         const double meconst = 9.1094e-28;   // electron mass [g]
-         const double amuconst = 1.6605e-24;  // atomic mass unit [g]
-         mM = meconst/(amuconst*atomicM); // me/M
-         
-         cout << "Background gas is " << gasName << " ... " << endl;
-         cout << "Tg = " << Tg << " K" << endl;
-         cout << "Pg = " << Pg << " Torr" << endl;
-         cout << "Ng = " << Ng << " 1/m^3" << endl;
-         cout << "m/M = " << mM << endl;
-         cout << "xsecs file = " << xsecsFile << endl;
-         loadXsecs(Egrid, xsecsFile);
-         
-         // add all xsecs together to get Qmom
-         //
-         const int nQ = Qmom.size();
-         const int nExc = Qexc.size();
-         vector<double> thisQexc;
-         Qmom = Qelm;
-         for (auto m=0; m<nExc; m++) {
-            thisQexc = Qexc[m];
-            for (auto n=0; n<nQ; n++) {
-               Qmom[n] += thisQexc[n];
-            }
+         if(gasName=="neopentane" || gasName=="pentane") {
+             atomicM = 72.15;     // atomic mass of pentane molecule (C5H12)
          }
-         const int nIzn = Qizn.size();
-         vector<double> thisQizn;
-         for (auto m=0; m<nIzn; m++) {
-            thisQizn = Qizn[m];
-            for (auto n=0; n<nQ; n++) {
-               Qmom[n] += thisQizn[n];
-            }
-         }     
-         
+         if(gasName=="propene")  {
+             atomicM = 42.08;     // atomic mass of propene molecule (C3H6)
+         } 
+	 else{
+            cout << "Gas species " << gasName << " is not a valid option" << endl;
+            cout << "need to manually specify atomicM !!!" << endl;
+            exit (EXIT_FAILURE);
+	 }
       }
       else {
-         cout << "Gas species " << gasName << " is not a valid option" << endl;
-         exit (EXIT_FAILURE);
+         cout << "atomicM specified in input file" << endl;
+	 atomicM = atomicMVal.asDouble();
       }
+
+      const double meconst = 9.1094e-28;   // electron mass [g]
+      const double amuconst = 1.6605e-24;  // atomic mass unit [g]
+      mM = meconst/(amuconst*atomicM); // me/M
+      cout << "Background gas is " << gasName << " ... " << endl;
+      cout << "Tg = " << Tg << " K" << endl;
+      cout << "Pg = " << Pg << " Torr" << endl;
+      cout << "Ng = " << Ng << " 1/m^3" << endl;
+      cout << "m/M = " << mM << endl;
+      cout << "xsecs file = " << xsecsFile << endl;
+      loadXsecs(Egrid, xsecsFile);
+      
+      // add all xsecs together to get Qmom
+      //
+      const int nQ = Qmom.size();
+      const int nExc = Qexc.size();
+      vector<double> thisQexc;
+      Qmom = Qelm;
+      for (auto m=0; m<nExc; m++) {
+         thisQexc = Qexc[m];
+         for (auto n=0; n<nQ; n++) {
+            Qmom[n] += thisQexc[n];
+         }
+      }
+      const int nIzn = Qizn.size();
+      vector<double> thisQizn;
+      for (auto m=0; m<nIzn; m++) {
+         thisQizn = Qizn[m];
+         for (auto n=0; n<nQ; n++) {
+            Qmom[n] += thisQizn[n];
+         }
+      }     
+      
    }
    else {
       cout << "value for key \"Gas\" is not object type !" << endl;
